@@ -21,8 +21,15 @@ A modern, full-stack collaborative Project and Task Management System (TMS) buil
 
 ---
 
-## ✨ Key Features
-
+- **🔒 Authentication & Protected Routes**:
+  - Secure JWT authentication with persistent sessions.
+  - Automatic route guarding (`ProtectedRoute`) redirecting unauthenticated users to `/login`.
+  - 1-Click quick demo login for all three roles (**Admin**, **Manager**, and **Member**).
+- **🛡️ Role-Based Access Control (RBAC)**:
+  - **👑 Admin** (`admin@tms.io` / `Admin@123`): Full access — can create, edit, and delete projects and team members.
+  - **💼 Manager** (`manager@tms.io` / `Manager@123`): Project lead — can create and edit projects and team members.
+  - **👤 Member** (`member@tms.io` / `Member@123`): Contributor — view-only dashboard, projects, and directory.
+  - Role-based UI guards (buttons hidden/disabled) + strict backend API authorization (403 Forbidden).
 - **📊 Comprehensive Executive Dashboard**: Real-time project KPIs, completion rates, budget & expenditure tracking, status breakdowns, priority distribution, and upcoming deadlines alert.
 - **📁 Full Project CRUD**:
   - Create new projects with title, description, category, timeline, priority, budget, progress percentage, and tags.
@@ -37,9 +44,8 @@ A modern, full-stack collaborative Project and Task Management System (TMS) buil
   - Add and update team members (name, unique email, role, department, contact info, skills, avatar).
   - Tracks live assigned project counts per member.
   - Safe deletion: automatically unassigns member from existing projects before removal.
-- **⚡ Zero-Config Local Development**:
-  - If a MongoDB Atlas URI is provided in `.env`, connects seamlessly to Atlas.
-  - If no URI is provided, automatically spins up an in-memory database with pre-seeded demo records for instantaneous out-of-the-box local testing.
+- **⚡ Zero-Config Local Development & Live Atlas Sync**:
+  - Connected directly to MongoDB Atlas cluster with automatic fallback to in-memory database if needed.
 - **🎨 Premium UI/UX**:
   - Sleek, modern design with Plus Jakarta Sans typography.
   - Dark mode and light mode toggle.

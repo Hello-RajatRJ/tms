@@ -16,8 +16,10 @@ import ProjectCard from '../components/ProjectCard';
 import ProjectForm from '../components/ProjectForm';
 import StatusBadge from '../components/StatusBadge';
 import { CardSkeletonGrid, ErrorState, EmptyState } from '../components/LoadingState';
+import { useAuth } from '../context/AuthContext';
 
 export const Projects = () => {
+  const { canManage, isAdmin, user } = useAuth();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('All');
   const [selectedPriority, setSelectedPriority] = useState('All');
@@ -122,13 +124,19 @@ export const Projects = () => {
             Create, track, filter, and organize all project deliverables and team assignments.
           </p>
         </div>
-        <button
-          onClick={() => setActiveModalProject({})}
-          className="inline-flex items-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl shadow-sm hover:shadow transition-all hover:scale-[1.02] shrink-0"
-        >
-          <Plus className="w-4 h-4 stroke-[3]" />
-          New Project
-        </button>
+        {canManage ? (
+          <button
+            onClick={() => setActiveModalProject({})}
+            className="inline-flex items-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl shadow-sm hover:shadow transition-all hover:scale-[1.02] shrink-0"
+          >
+            <Plus className="w-4 h-4 stroke-[3]" />
+            New Project
+          </button>
+        ) : (
+          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 text-xs font-semibold border border-slate-200 dark:border-slate-700">
+            Role: <strong className="text-slate-800 dark:text-slate-200 capitalize">{user?.role}</strong> (View Only)
+          </span>
+        )}
       </div>
 
       {/* Controls: Search, Filters & View Mode */}
@@ -310,20 +318,26 @@ export const Projects = () => {
                       </td>
                       <td className="py-3.5 px-4 text-slate-500 font-medium">{dateStr}</td>
                       <td className="py-3.5 px-4 text-right">
-                        <div className="flex items-center justify-end gap-1.5">
-                          <button
-                            onClick={() => setActiveModalProject(p)}
-                            className="px-2.5 py-1 text-[11px] font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
-                          >
-                            Edit
-                          </button>
-                          <button
-                            onClick={() => setProjectToDelete(p)}
-                            className="px-2.5 py-1 text-[11px] font-semibold text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 rounded-lg transition-colors"
-                          >
-                            Delete
-                          </button>
-                        </div>
+                        {canManage ? (
+                          <div className="flex items-center justify-end gap-1.5">
+                            <button
+                              onClick={() => setActiveModalProject(p)}
+                              className="px-2.5 py-1 text-[11px] font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
+                            >
+                              Edit
+                            </button>
+                            {isAdmin && (
+                              <button
+                                onClick={() => setProjectToDelete(p)}
+                                className="px-2.5 py-1 text-[11px] font-semibold text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 rounded-lg transition-colors"
+                              >
+                                Delete
+                              </button>
+                            )}
+                          </div>
+                        ) : (
+                          <span className="text-[11px] text-slate-400 font-medium">Read Only</span>
+                        )}
                       </td>
                     </tr>
                   );

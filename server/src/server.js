@@ -7,6 +7,7 @@ import { connectDB } from './config/db.js';
 import { seedDatabase } from './services/seedService.js';
 import projectRoutes from './routes/projectRoutes.js';
 import teamMemberRoutes from './routes/teamMemberRoutes.js';
+import authRoutes from './routes/authRoutes.js';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
 
 const app = express();
@@ -36,6 +37,7 @@ app.get('/api/health', (req, res) => {
 });
 
 // API Routes
+app.use('/api/auth', authRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/team-members', teamMemberRoutes);
 

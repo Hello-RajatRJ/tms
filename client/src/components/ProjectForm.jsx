@@ -49,7 +49,7 @@ export const ProjectForm = ({ project = null, allMembers = [], onClose, onSubmit
     const { name, value, type } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: type === 'number' ? Number(value) : value,
+      [name]: type === 'number' || name === 'progress' ? Number(value) : value,
     }));
     // Clear validation error when user types
     if (errors[name]) {
@@ -105,9 +105,9 @@ export const ProjectForm = ({ project = null, allMembers = [], onClose, onSubmit
         ...formData,
         tags: formData.tags
           ? formData.tags
-              .split(',')
-              .map((t) => t.trim())
-              .filter(Boolean)
+            .split(',')
+            .map((t) => t.trim())
+            .filter(Boolean)
           : [],
       };
       await onSubmit(payload);
@@ -161,11 +161,10 @@ export const ProjectForm = ({ project = null, allMembers = [], onClose, onSubmit
               value={formData.title}
               onChange={handleChange}
               placeholder="e.g. Enterprise Payment Gateway Migration"
-              className={`w-full px-3.5 py-2 text-sm rounded-xl border bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all ${
-                errors.title
-                  ? 'border-rose-400 focus:border-rose-500'
-                  : 'border-slate-200 dark:border-slate-700 focus:border-indigo-500'
-              }`}
+              className={`w-full px-3.5 py-2 text-sm rounded-xl border bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all ${errors.title
+                ? 'border-rose-400 focus:border-rose-500'
+                : 'border-slate-200 dark:border-slate-700 focus:border-indigo-500'
+                }`}
             />
             {errors.title && <p className="text-[11px] text-rose-500 mt-1">{errors.title}</p>}
           </div>
@@ -181,11 +180,10 @@ export const ProjectForm = ({ project = null, allMembers = [], onClose, onSubmit
               value={formData.description}
               onChange={handleChange}
               placeholder="Outline project objectives, key deliverables, and requirements..."
-              className={`w-full px-3.5 py-2 text-sm rounded-xl border bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all ${
-                errors.description
-                  ? 'border-rose-400 focus:border-rose-500'
-                  : 'border-slate-200 dark:border-slate-700 focus:border-indigo-500'
-              }`}
+              className={`w-full px-3.5 py-2 text-sm rounded-xl border bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all ${errors.description
+                ? 'border-rose-400 focus:border-rose-500'
+                : 'border-slate-200 dark:border-slate-700 focus:border-indigo-500'
+                }`}
             />
             {errors.description && (
               <p className="text-[11px] text-rose-500 mt-1">{errors.description}</p>
@@ -259,9 +257,8 @@ export const ProjectForm = ({ project = null, allMembers = [], onClose, onSubmit
                 name="dueDate"
                 value={formData.dueDate}
                 onChange={handleChange}
-                className={`w-full px-3.5 py-2 text-sm rounded-xl border bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500 ${
-                  errors.dueDate ? 'border-rose-400' : 'border-slate-200 dark:border-slate-700'
-                }`}
+                className={`w-full px-3.5 py-2 text-sm rounded-xl border bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500 ${errors.dueDate ? 'border-rose-400' : 'border-slate-200 dark:border-slate-700'
+                  }`}
               />
               {errors.dueDate && <p className="text-[11px] text-rose-500 mt-1">{errors.dueDate}</p>}
             </div>
@@ -352,11 +349,10 @@ export const ProjectForm = ({ project = null, allMembers = [], onClose, onSubmit
                       key={member._id}
                       type="button"
                       onClick={() => handleMemberToggle(member._id)}
-                      className={`flex items-center justify-between p-2 rounded-xl border text-left transition-all ${
-                        isSelected
-                          ? 'border-indigo-500 bg-indigo-50/70 dark:bg-indigo-950/40 text-indigo-900 dark:text-indigo-200'
-                          : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300'
-                      }`}
+                      className={`flex items-center justify-between p-2 rounded-xl border text-left transition-all ${isSelected
+                        ? 'border-indigo-500 bg-indigo-50/70 dark:bg-indigo-950/40 text-indigo-900 dark:text-indigo-200'
+                        : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300'
+                        }`}
                     >
                       <div className="flex items-center gap-2 min-w-0">
                         <div className="w-6 h-6 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-[10px] font-bold text-slate-700 dark:text-slate-300 shrink-0">
@@ -368,11 +364,10 @@ export const ProjectForm = ({ project = null, allMembers = [], onClose, onSubmit
                         </div>
                       </div>
                       <div
-                        className={`w-4 h-4 rounded flex items-center justify-center shrink-0 ml-2 ${
-                          isSelected
-                            ? 'bg-indigo-600 text-white'
-                            : 'border border-slate-300 dark:border-slate-600'
-                        }`}
+                        className={`w-4 h-4 rounded flex items-center justify-center shrink-0 ml-2 ${isSelected
+                          ? 'bg-indigo-600 text-white'
+                          : 'border border-slate-300 dark:border-slate-600'
+                          }`}
                       >
                         {isSelected && <Check className="w-3 h-3 stroke-[3]" />}
                       </div>

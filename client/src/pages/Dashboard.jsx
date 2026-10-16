@@ -16,8 +16,10 @@ import { projectService, teamMemberService } from '../services/api';
 import StatusBadge from '../components/StatusBadge';
 import { LoadingState, ErrorState } from '../components/LoadingState';
 import ProjectForm from '../components/ProjectForm';
+import { useAuth } from '../context/AuthContext';
 
 export const Dashboard = () => {
+  const { canManage } = useAuth();
   const [stats, setStats] = useState(null);
   const [recentProjects, setRecentProjects] = useState([]);
   const [teamMembers, setTeamMembers] = useState([]);
@@ -123,13 +125,15 @@ export const Dashboard = () => {
             </p>
           </div>
           <div className="flex items-center gap-3">
-            <button
-              onClick={() => setShowCreateModal(true)}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white text-indigo-700 hover:bg-indigo-50 font-semibold text-xs shadow-sm transition-all hover:scale-105"
-            >
-              <Plus className="w-4 h-4 stroke-[2.5]" />
-              New Project
-            </button>
+            {canManage && (
+              <button
+                onClick={() => setShowCreateModal(true)}
+                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white text-indigo-700 hover:bg-indigo-50 font-semibold text-xs shadow-sm transition-all hover:scale-105"
+              >
+                <Plus className="w-4 h-4 stroke-[2.5]" />
+                New Project
+              </button>
+            )}
             <Link
               to="/projects"
               className="inline-flex items-center gap-1 px-4 py-2.5 rounded-xl bg-indigo-500/30 hover:bg-indigo-500/40 text-white font-semibold text-xs border border-white/20 transition-colors"
@@ -364,12 +368,16 @@ export const Dashboard = () => {
                     <td className="py-3 px-3 text-slate-500">{dateStr}</td>
                     <td className="py-3 px-3 text-right">
                       {p.status !== 'Completed' ? (
-                        <button
-                          onClick={() => handleQuickStatusChange(p._id, 'Completed')}
-                          className="px-2.5 py-1 text-[11px] font-semibold text-emerald-600 hover:text-emerald-700 bg-emerald-50 dark:bg-emerald-950/40 rounded-lg transition-colors"
-                        >
-                          Complete
-                        </button>
+                        canManage ? (
+                          <button
+                            onClick={() => handleQuickStatusChange(p._id, 'Completed')}
+                            className="px-2.5 py-1 text-[11px] font-semibold text-emerald-600 hover:text-emerald-700 bg-emerald-50 dark:bg-emerald-950/40 rounded-lg transition-colors"
+                          >
+                            Complete
+                          </button>
+                        ) : (
+                          <span className="text-[11px] text-slate-400">In Progress</span>
+                        )
                       ) : (
                         <span className="text-[11px] text-slate-400">Done</span>
                       )}

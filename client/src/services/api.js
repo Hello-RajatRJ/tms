@@ -10,11 +10,32 @@ const api = axios.create({
   timeout: 15000,
 });
 
-// Interceptor for extracting clean error messages
+// Request Interceptor: Attach JWT Bearer Token
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('tms_token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+// Response Interceptor: Extract clean error messages and handle 401
 api.interceptors.response.use(
   (response) => response.data,
   (error) => {
     let errorMessage = 'An unexpected error occurred. Please try again.';
+
+    if (error.response?.status === 401) {
+      // Don't auto-clear if this was a login attempt failure
+      if (!error.config?.url?.includes('/auth/login')) {
+        localStorage.removeItem('tms_token');
+        localStorage.removeItem('tms_user');
+      }
+    }
+
     if (error.response?.data) {
       const data = error.response.data;
       if (data.message) {
@@ -30,6 +51,13 @@ api.interceptors.response.use(
     return Promise.reject(new Error(errorMessage));
   }
 );
+
+// Authentication Endpoints
+export const authService = {
+  login: (credentials) => api.post('/auth/login', credentials),
+  register: (userData) => api.post('/auth/register', userData),
+  getMe: () => api.get('/auth/me'),
+};
 
 // Project Endpoints
 export const projectService = {

@@ -1,7 +1,41 @@
 import { TeamMember } from '../models/TeamMember.js';
 import { Project } from '../models/Project.js';
+import { User } from '../models/User.js';
 
 export const seedDatabase = async () => {
+  // 1. Seed Users for Auth & Role Based Access Control
+  const userCount = await User.countDocuments();
+  if (userCount === 0) {
+    console.log('[Seed] Seeding default authentication users (admin, manager, member)...');
+    await User.create([
+      {
+        name: 'Alex Rivera',
+        email: 'admin@tms.io',
+        password: 'Admin@123',
+        role: 'admin',
+        title: 'Executive Admin',
+        avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
+      },
+      {
+        name: 'Morgan Vance',
+        email: 'manager@tms.io',
+        password: 'Manager@123',
+        role: 'manager',
+        title: 'Project Lead',
+        avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150',
+      },
+      {
+        name: 'Taylor Brooks',
+        email: 'member@tms.io',
+        password: 'Member@123',
+        role: 'member',
+        title: 'Software Engineer',
+        avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150',
+      },
+    ]);
+    console.log('[Seed] Default users seeded successfully.');
+  }
+
   const memberCount = await TeamMember.countDocuments();
   if (memberCount > 0) {
     console.log('[Seed] Database already contains records. Skipping seed.');

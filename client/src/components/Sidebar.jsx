@@ -5,16 +5,21 @@ import {
   FolderKanban,
   Users2,
   CheckSquare2,
-  Sparkles,
   Server,
   Menu,
   X,
+  LogOut,
+  Shield,
+  Briefcase,
+  User,
 } from 'lucide-react';
 import { checkHealth } from '../services/api';
+import { useAuth } from '../context/AuthContext';
 
 export const Sidebar = () => {
   const [serverOnline, setServerOnline] = useState(null);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { user, logout } = useAuth();
 
   useEffect(() => {
     const pingServer = async () => {
@@ -35,6 +40,33 @@ export const Sidebar = () => {
     { name: 'Projects', path: '/projects', icon: FolderKanban },
     { name: 'Team Members', path: '/team-members', icon: Users2 },
   ];
+
+  const getRoleBadge = (role) => {
+    switch (role) {
+      case 'admin':
+        return {
+          label: 'Admin',
+          icon: Shield,
+          color: 'bg-purple-100 text-purple-700 dark:bg-purple-950/60 dark:text-purple-300 border-purple-200 dark:border-purple-800',
+        };
+      case 'manager':
+        return {
+          label: 'Manager',
+          icon: Briefcase,
+          color: 'bg-sky-100 text-sky-700 dark:bg-sky-950/60 dark:text-sky-300 border-sky-200 dark:border-sky-800',
+        };
+      case 'member':
+      default:
+        return {
+          label: 'Member',
+          icon: User,
+          color: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800',
+        };
+    }
+  };
+
+  const roleInfo = getRoleBadge(user?.role);
+  const RoleIcon = roleInfo.icon;
 
   const sidebarContent = (
     <div className="flex flex-col h-full bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 w-64 p-5">
@@ -84,31 +116,54 @@ export const Sidebar = () => {
         })}
       </div>
 
-      {/* Backend Server Status Card */}
-      <div className="pt-4 border-t border-slate-100 dark:border-slate-800">
-        <div className="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-100 dark:border-slate-800">
-          <div className="flex items-center justify-between mb-1">
-            <div className="flex items-center gap-2 text-xs font-semibold text-slate-700 dark:text-slate-300">
-              <Server className="w-3.5 h-3.5 text-indigo-500" />
-              <span>Backend API</span>
+      {/* User Session & Role Card */}
+      {user && (
+        <div className="pt-4 border-t border-slate-100 dark:border-slate-800 space-y-3">
+          <div className="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-800 flex items-center justify-between">
+            <div className="flex items-center gap-2.5 min-w-0">
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 to-purple-600 flex items-center justify-center text-white text-xs font-bold shadow-xs shrink-0">
+                {user.avatar ? (
+                  <img src={user.avatar} alt={user.name} className="w-full h-full object-cover rounded-xl" />
+                ) : (
+                  user.name.charAt(0).toUpperCase()
+                )}
+              </div>
+              <div className="truncate">
+                <p className="text-xs font-bold text-slate-900 dark:text-white truncate">{user.name}</p>
+                <div className="flex items-center gap-1 mt-0.5">
+                  <span className={`inline-flex items-center gap-1 text-[10px] font-bold px-1.5 py-0.2 rounded-md border ${roleInfo.color}`}>
+                    <RoleIcon className="w-2.5 h-2.5" />
+                    {roleInfo.label}
+                  </span>
+                </div>
+              </div>
             </div>
-            <span
-              className={`w-2 h-2 rounded-full ${
-                serverOnline === true
-                  ? 'bg-emerald-500 shadow-sm shadow-emerald-500/50 animate-pulse'
-                  : serverOnline === false
-                  ? 'bg-rose-500'
-                  : 'bg-amber-400'
-              }`}
-            />
+
+            <button
+              onClick={logout}
+              className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 rounded-lg transition-colors ml-1"
+              title="Sign Out"
+            >
+              <LogOut className="w-4 h-4" />
+            </button>
           </div>
-          <p className="text-[11px] text-slate-500 dark:text-slate-400">
-            {serverOnline === true
-              ? 'Connected (Port 5000)'
-              : serverOnline === false
-              ? 'Disconnected'
-              : 'Connecting...'}
-          </p>
+        </div>
+      )}
+
+      {/* Backend Server Status Card */}
+      <div className="pt-3">
+        <div className="p-2.5 bg-slate-50 dark:bg-slate-800/30 rounded-xl border border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-medium text-slate-500 dark:text-slate-400">
+          <div className="flex items-center gap-2">
+            <Server className="w-3.5 h-3.5 text-indigo-500" />
+            <span className="text-[11px]">API: Atlas MongoDB</span>
+          </div>
+          <span
+            className={`w-2 h-2 rounded-full ${
+              serverOnline === true
+                ? 'bg-emerald-500 shadow-sm shadow-emerald-500/50 animate-pulse'
+                : 'bg-rose-500'
+            }`}
+          />
         </div>
       </div>
     </div>

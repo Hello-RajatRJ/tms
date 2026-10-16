@@ -17,8 +17,10 @@ import {
 import { useTeamMembers } from '../hooks/useTeamMembers';
 import StatusBadge from '../components/StatusBadge';
 import { CardSkeletonGrid, ErrorState, EmptyState } from '../components/LoadingState';
+import { useAuth } from '../context/AuthContext';
 
 export const TeamMembers = () => {
+  const { canManage, isAdmin, user } = useAuth();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('All');
   const [selectedDepartment, setSelectedDepartment] = useState('All');
@@ -100,13 +102,19 @@ export const TeamMembers = () => {
             Manage your project collaborators, engineers, designers, and managers.
           </p>
         </div>
-        <button
-          onClick={() => setActiveModalMember({})}
-          className="inline-flex items-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl shadow-sm hover:shadow transition-all hover:scale-[1.02] shrink-0"
-        >
-          <Plus className="w-4 h-4 stroke-[3]" />
-          Add Member
-        </button>
+        {canManage ? (
+          <button
+            onClick={() => setActiveModalMember({})}
+            className="inline-flex items-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl shadow-sm hover:shadow transition-all hover:scale-[1.02] shrink-0"
+          >
+            <Plus className="w-4 h-4 stroke-[3]" />
+            Add Member
+          </button>
+        ) : (
+          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 text-xs font-semibold border border-slate-200 dark:border-slate-700">
+            Role: <strong className="text-slate-800 dark:text-slate-200 capitalize">{user?.role}</strong> (View Only)
+          </span>
+        )}
       </div>
 
       {/* Search and Filters */}
@@ -206,22 +214,26 @@ export const TeamMembers = () => {
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-1">
-                    <button
-                      onClick={() => setActiveModalMember(member)}
-                      className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-                      title="Edit Member"
-                    >
-                      <Edit2 className="w-3.5 h-3.5" />
-                    </button>
-                    <button
-                      onClick={() => setMemberToDelete(member)}
-                      className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors"
-                      title="Delete Member"
-                    >
-                      <Trash2 className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
+                  {canManage && (
+                    <div className="flex items-center gap-1">
+                      <button
+                        onClick={() => setActiveModalMember(member)}
+                        className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                        title="Edit Member"
+                      >
+                        <Edit2 className="w-3.5 h-3.5" />
+                      </button>
+                      {isAdmin && (
+                        <button
+                          onClick={() => setMemberToDelete(member)}
+                          className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors"
+                          title="Delete Member"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      )}
+                    </div>
+                  )}
                 </div>
 
                 {/* Details List */}

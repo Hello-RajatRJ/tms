@@ -10,9 +10,11 @@ import {
   CheckCircle2,
 } from 'lucide-react';
 import StatusBadge from './StatusBadge';
+import { useAuth } from '../context/AuthContext';
 
 export const ProjectCard = ({ project, onEdit, onDelete, onStatusChange }) => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { canManage, isAdmin } = useAuth();
 
   const {
     _id,
@@ -63,61 +65,65 @@ export const ProjectCard = ({ project, onEdit, onDelete, onStatusChange }) => {
             )}
           </div>
 
-          {/* Action Menu */}
-          <div className="relative">
-            <button
-              onClick={() => setMenuOpen(!menuOpen)}
-              className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-              title="Project options"
-            >
-              <MoreVertical className="w-4 h-4" />
-            </button>
+          {/* Action Menu (Restricted by Role) */}
+          {canManage && (
+            <div className="relative">
+              <button
+                onClick={() => setMenuOpen(!menuOpen)}
+                className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                title="Project options"
+              >
+                <MoreVertical className="w-4 h-4" />
+              </button>
 
-            {menuOpen && (
-              <>
-                <div
-                  className="fixed inset-0 z-20"
-                  onClick={() => setMenuOpen(false)}
-                />
-                <div className="absolute right-0 top-full mt-1 w-36 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-lg py-1 z-30 animate-fade-in text-xs font-medium">
-                  <button
-                    onClick={() => {
-                      setMenuOpen(false);
-                      onEdit(project);
-                    }}
-                    className="w-full flex items-center gap-2 px-3 py-2 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors text-left"
-                  >
-                    <Edit2 className="w-3.5 h-3.5 text-indigo-500" />
-                    Edit Project
-                  </button>
-
-                  {status !== 'Completed' && (
+              {menuOpen && (
+                <>
+                  <div
+                    className="fixed inset-0 z-20"
+                    onClick={() => setMenuOpen(false)}
+                  />
+                  <div className="absolute right-0 top-full mt-1 w-36 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-lg py-1 z-30 animate-fade-in text-xs font-medium">
                     <button
                       onClick={() => {
                         setMenuOpen(false);
-                        onStatusChange && onStatusChange(_id, 'Completed');
+                        onEdit(project);
                       }}
-                      className="w-full flex items-center gap-2 px-3 py-2 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 transition-colors text-left"
+                      className="w-full flex items-center gap-2 px-3 py-2 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors text-left"
                     >
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
-                      Mark Complete
+                      <Edit2 className="w-3.5 h-3.5 text-indigo-500" />
+                      Edit Project
                     </button>
-                  )}
 
-                  <button
-                    onClick={() => {
-                      setMenuOpen(false);
-                      onDelete(project);
-                    }}
-                    className="w-full flex items-center gap-2 px-3 py-2 text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors text-left border-t border-slate-100 dark:border-slate-700/60"
-                  >
-                    <Trash2 className="w-3.5 h-3.5 text-rose-500" />
-                    Delete
-                  </button>
-                </div>
-              </>
-            )}
-          </div>
+                    {status !== 'Completed' && (
+                      <button
+                        onClick={() => {
+                          setMenuOpen(false);
+                          onStatusChange && onStatusChange(_id, 'Completed');
+                        }}
+                        className="w-full flex items-center gap-2 px-3 py-2 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 transition-colors text-left"
+                      >
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+                        Mark Complete
+                      </button>
+                    )}
+
+                    {isAdmin && (
+                      <button
+                        onClick={() => {
+                          setMenuOpen(false);
+                          onDelete(project);
+                        }}
+                        className="w-full flex items-center gap-2 px-3 py-2 text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors text-left border-t border-slate-100 dark:border-slate-700/60"
+                      >
+                        <Trash2 className="w-3.5 h-3.5 text-rose-500" />
+                        Delete
+                      </button>
+                    )}
+                  </div>
+                </>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Title & Description */}

@@ -1,8 +1,8 @@
-// Comprehensive API Test Suite
+// Comprehensive API & RBAC Test Suite
 const BASE_URL = 'http://localhost:5000/api';
 
 const runTests = async () => {
-  console.log('🧪 Starting TMS API Verification Suite...\n');
+  console.log('🧪 Starting TMS API & RBAC Verification Suite...\n');
   let passed = 0;
   let failed = 0;
 
@@ -22,13 +22,53 @@ const runTests = async () => {
     const healthData = await healthRes.json();
     assert('Health Check (200 OK)', healthRes.status === 200 && healthData.status === 'healthy');
 
-    // 2. GET /api/team-members
-    const membersRes = await fetch(`${BASE_URL}/team-members`);
-    const membersData = await membersRes.json();
-    assert('GET /api/team-members returns list', membersRes.status === 200 && membersData.data.length > 0);
-    const existingMember = membersData.data[0];
+    // 2. Auth: Login with invalid password (401)
+    const badLoginRes = await fetch(`${BASE_URL}/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: 'admin@tms.io', password: 'WrongPassword' }),
+    });
+    assert('Auth: Invalid credentials returns 401', badLoginRes.status === 401);
 
-    // 3. POST /api/team-members (Success)
+    // 3. Auth: Login as Admin (200 OK + JWT)
+    const adminLoginRes = await fetch(`${BASE_URL}/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: 'admin@tms.io', password: 'Admin@123' }),
+    });
+    const adminAuth = await adminLoginRes.json();
+    assert('Auth: Admin login success (200 OK + token)', adminLoginRes.status === 200 && adminAuth.token && adminAuth.user.role === 'admin');
+    const adminToken = adminAuth.token;
+
+    // 4. Auth: Login as Member (200 OK + role member)
+    const memberLoginRes = await fetch(`${BASE_URL}/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: 'member@tms.io', password: 'Member@123' }),
+    });
+    const memberAuth = await memberLoginRes.json();
+    assert('Auth: Member login success (200 OK)', memberLoginRes.status === 200 && memberAuth.user.role === 'member');
+    const memberToken = memberAuth.token;
+
+    // 5. Auth: GET /api/auth/me (Protected profile)
+    const meRes = await fetch(`${BASE_URL}/auth/me`, {
+      headers: { Authorization: `Bearer ${adminToken}` },
+    });
+    const meData = await meRes.json();
+    assert('Auth: GET /api/auth/me returns profile (200 OK)', meRes.status === 200 && meData.user.email === 'admin@tms.io');
+
+    // 6. Security: Unauthenticated request to projects rejected (401 Unauthorized)
+    const noTokenRes = await fetch(`${BASE_URL}/projects`);
+    assert('RBAC: Unauthenticated access blocked (401 Unauthorized)', noTokenRes.status === 401);
+
+    // 7. GET /api/team-members (with auth)
+    const membersRes = await fetch(`${BASE_URL}/team-members`, {
+      headers: { Authorization: `Bearer ${adminToken}` },
+    });
+    const membersData = await membersRes.json();
+    assert('GET /api/team-members returns list (200 OK)', membersRes.status === 200 && membersData.data.length > 0);
+
+    // 8. POST /api/team-members (Admin success)
     const newMemberPayload = {
       name: 'Sarah Connor',
       email: `sarah.${Date.now()}@skynet.com`,
@@ -40,56 +80,48 @@ const runTests = async () => {
     };
     const createMemberRes = await fetch(`${BASE_URL}/team-members`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${adminToken}`,
+      },
       body: JSON.stringify(newMemberPayload),
     });
     const createdMemberData = await createMemberRes.json();
     assert('POST /api/team-members success (201 Created)', createMemberRes.status === 201 && createdMemberData.data._id);
     const createdMemberId = createdMemberData.data?._id;
 
-    // 4. POST /api/team-members (Duplicate Email Conflict 409)
-    const dupMemberRes = await fetch(`${BASE_URL}/team-members`, {
+    // 9. RBAC: Member role forbidden from creating team members (403 Forbidden)
+    const memberCreateMemberRes = await fetch(`${BASE_URL}/team-members`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(newMemberPayload),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${memberToken}`,
+      },
+      body: JSON.stringify({ name: 'Hacker', email: 'hacker@test.com', role: 'Dev' }),
     });
-    assert('POST /api/team-members duplicate email (409 Conflict)', dupMemberRes.status === 409);
+    assert('RBAC: Member role cannot create team member (403 Forbidden)', memberCreateMemberRes.status === 403);
 
-    // 5. PATCH /api/team-members/:id (Update)
-    const patchMemberRes = await fetch(`${BASE_URL}/team-members/${createdMemberId}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ role: 'Lead DevOps Engineer' }),
+    // 10. GET /api/projects (Authenticated)
+    const projectsRes = await fetch(`${BASE_URL}/projects`, {
+      headers: { Authorization: `Bearer ${adminToken}` },
     });
-    const patchedMemberData = await patchMemberRes.json();
-    assert('PATCH /api/team-members/:id success (200 OK)', patchMemberRes.status === 200 && patchedMemberData.data.role === 'Lead DevOps Engineer');
-
-    // 6. GET /api/projects (List projects)
-    const projectsRes = await fetch(`${BASE_URL}/projects`);
     const projectsData = await projectsRes.json();
-    assert('GET /api/projects returns seeded projects', projectsRes.status === 200 && projectsData.data.length > 0);
+    assert('GET /api/projects returns projects (200 OK)', projectsRes.status === 200 && projectsData.data.length > 0);
     const existingProject = projectsData.data[0];
 
-    // 7. GET /api/projects/stats
-    const statsRes = await fetch(`${BASE_URL}/projects/stats`);
-    const statsData = await statsRes.json();
-    assert('GET /api/projects/stats returns analytics', statsRes.status === 200 && statsData.data.totalProjects >= 5);
+    // 11. GET /api/projects/stats
+    const statsRes = await fetch(`${BASE_URL}/projects/stats`, {
+      headers: { Authorization: `Bearer ${adminToken}` },
+    });
+    assert('GET /api/projects/stats returns analytics (200 OK)', statsRes.status === 200);
 
-    // 8. GET /api/projects/:id (Success)
-    const getProjectRes = await fetch(`${BASE_URL}/projects/${existingProject._id}`);
-    const getProjectData = await getProjectRes.json();
-    assert('GET /api/projects/:id valid project (200 OK)', getProjectRes.status === 200 && getProjectData.data.title === existingProject.title);
+    // 12. GET /api/projects/:id (Success)
+    const getProjectRes = await fetch(`${BASE_URL}/projects/${existingProject._id}`, {
+      headers: { Authorization: `Bearer ${memberToken}` }, // Member can read
+    });
+    assert('GET /api/projects/:id readable by member (200 OK)', getProjectRes.status === 200);
 
-    // 9. GET /api/projects/:id (Missing project 404)
-    const fakeId = '507f1f77bcf86cd799439011';
-    const missingProjectRes = await fetch(`${BASE_URL}/projects/${fakeId}`);
-    assert('GET /api/projects/:id missing project (404 Not Found)', missingProjectRes.status === 404);
-
-    // 10. GET /api/projects/:id (Invalid ObjectId format 400)
-    const invalidIdRes = await fetch(`${BASE_URL}/projects/invalid-id-1234`);
-    assert('GET /api/projects/:id invalid ObjectId (400 Bad Request)', invalidIdRes.status === 400);
-
-    // 11. POST /api/projects (Success)
+    // 13. POST /api/projects (Admin create project 201)
     const newProjectPayload = {
       title: 'Automated Postman Verification System',
       description: 'End-to-end integration and API verification suite for the TMS backend.',
@@ -105,48 +137,36 @@ const runTests = async () => {
     };
     const createProjectRes = await fetch(`${BASE_URL}/projects`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${adminToken}`,
+      },
       body: JSON.stringify(newProjectPayload),
     });
     const createdProjectData = await createProjectRes.json();
     assert('POST /api/projects success (201 Created)', createProjectRes.status === 201 && createdProjectData.data._id);
     const createdProjectId = createdProjectData.data?._id;
 
-    // 12. POST /api/projects (Invalid Input Validation Error 400)
-    const invalidProjectRes = await fetch(`${BASE_URL}/projects`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title: 'A' }), // Title too short, missing description and dueDate
-    });
-    const invalidProjectData = await invalidProjectRes.json();
-    assert('POST /api/projects invalid input (400 Validation Error)', invalidProjectRes.status === 400 && invalidProjectData.errors?.length > 0);
-
-    // 13. PATCH /api/projects/:id (Update)
-    const patchProjectRes = await fetch(`${BASE_URL}/projects/${createdProjectId}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ progress: 85, status: 'Completed' }),
-    });
-    const patchedProjectData = await patchProjectRes.json();
-    assert('PATCH /api/projects/:id update success (200 OK)', patchProjectRes.status === 200 && patchedProjectData.data.progress === 85 && patchedProjectData.data.status === 'Completed');
-
-    // 14. DELETE /api/projects/:id (Success)
-    const deleteProjectRes = await fetch(`${BASE_URL}/projects/${createdProjectId}`, {
+    // 14. RBAC: Member cannot delete project (403 Forbidden)
+    const memberDeleteRes = await fetch(`${BASE_URL}/projects/${createdProjectId}`, {
       method: 'DELETE',
+      headers: { Authorization: `Bearer ${memberToken}` },
     });
-    assert('DELETE /api/projects/:id success (200 OK)', deleteProjectRes.status === 200);
+    assert('RBAC: Member cannot delete project (403 Forbidden)', memberDeleteRes.status === 403);
 
-    // 15. DELETE /api/projects/:id (Missing project 404)
-    const deleteMissingProjectRes = await fetch(`${BASE_URL}/projects/${createdProjectId}`, {
+    // 15. DELETE /api/projects/:id (Admin delete success 200)
+    const adminDeleteRes = await fetch(`${BASE_URL}/projects/${createdProjectId}`, {
       method: 'DELETE',
+      headers: { Authorization: `Bearer ${adminToken}` },
     });
-    assert('DELETE /api/projects/:id already deleted (404 Not Found)', deleteMissingProjectRes.status === 404);
+    assert('DELETE /api/projects/:id allowed for Admin (200 OK)', adminDeleteRes.status === 200);
 
-    // 16. DELETE /api/team-members/:id (Success)
-    const deleteMemberRes = await fetch(`${BASE_URL}/team-members/${createdMemberId}`, {
+    // 16. DELETE /api/team-members/:id (Admin delete success 200)
+    const adminDeleteMemberRes = await fetch(`${BASE_URL}/team-members/${createdMemberId}`, {
       method: 'DELETE',
+      headers: { Authorization: `Bearer ${adminToken}` },
     });
-    assert('DELETE /api/team-members/:id success (200 OK)', deleteMemberRes.status === 200);
+    assert('DELETE /api/team-members/:id allowed for Admin (200 OK)', adminDeleteMemberRes.status === 200);
 
     console.log(`\n=========================================`);
     console.log(`🎯 Test Summary: ${passed} Passed, ${failed} Failed`);

@@ -12,21 +12,25 @@ import {
   createTeamMemberSchema,
   updateTeamMemberSchema,
 } from '../middleware/validateRequest.js';
+import { protect, authorize } from '../middleware/authMiddleware.js';
 
 const router = Router();
+
+// Protect all team member routes
+router.use(protect);
 
 // GET /api/team-members & POST /api/team-members
 router
   .route('/')
   .get(getTeamMembers)
-  .post(validateBody(createTeamMemberSchema), createTeamMember);
+  .post(authorize('admin', 'manager'), validateBody(createTeamMemberSchema), createTeamMember);
 
 // GET, PATCH, DELETE /api/team-members/:id
 router
   .route('/:id')
   .all(validateObjectIdParam('id'))
   .get(getTeamMemberById)
-  .patch(validateBody(updateTeamMemberSchema), updateTeamMember)
-  .delete(deleteTeamMember);
+  .patch(authorize('admin', 'manager'), validateBody(updateTeamMemberSchema), updateTeamMember)
+  .delete(authorize('admin'), deleteTeamMember);
 
 export default router;
