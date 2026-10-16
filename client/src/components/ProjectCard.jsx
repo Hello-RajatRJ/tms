@@ -10,11 +10,11 @@ import {
   CheckCircle2,
 } from 'lucide-react';
 import StatusBadge from './StatusBadge';
-import { useAuth } from '../context/AuthContext';
+import { useAuthStore } from '../store/useAuthStore';
 
 export const ProjectCard = ({ project, onEdit, onDelete, onStatusChange }) => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const { canManage, isAdmin } = useAuth();
+  const { canManage, isAdmin } = useAuthStore();
 
   const {
     _id,

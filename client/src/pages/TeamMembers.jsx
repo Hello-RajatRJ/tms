@@ -14,35 +14,34 @@ import {
   Loader2,
   UserCheck,
 } from 'lucide-react';
-import { useTeamMembers } from '../hooks/useTeamMembers';
 import StatusBadge from '../components/StatusBadge';
 import { CardSkeletonGrid, ErrorState, EmptyState } from '../components/LoadingState';
-import { useAuth } from '../context/AuthContext';
+import { useAuthStore } from '../store/useAuthStore';
+import { useTeamMemberStore } from '../store/useTeamMemberStore';
 
 export const TeamMembers = () => {
-  const { canManage, isAdmin, user } = useAuth();
+  const { canManage, isAdmin, user } = useAuthStore();
+  const {
+    teamMembers,
+    loading,
+    error,
+    toast,
+    fetchTeamMembers,
+    createTeamMember,
+    updateTeamMember,
+    deleteTeamMember,
+  } = useTeamMemberStore();
+
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('All');
   const [selectedDepartment, setSelectedDepartment] = useState('All');
 
   const [activeModalMember, setActiveModalMember] = useState(null); // null = closed, {} = add, member = edit
   const [memberToDelete, setMemberToDelete] = useState(null);
-  const [toast, setToast] = useState(null);
 
-  const {
-    teamMembers,
-    loading,
-    error,
-    refetch,
-    addMember,
-    updateMember,
-    removeMember,
-  } = useTeamMembers();
-
-  const showToast = (message, type = 'success') => {
-    setToast({ message, type });
-    setTimeout(() => setToast(null), 4000);
-  };
+  useEffect(() => {
+    fetchTeamMembers();
+  }, [fetchTeamMembers]);
 
   const departments = ['Engineering', 'Product Design', 'Infrastructure', 'Quality Assurance', 'Marketing', 'Management'];
 
@@ -63,22 +62,19 @@ export const TeamMembers = () => {
 
   const handleSaveMember = async (formData) => {
     if (activeModalMember && activeModalMember._id) {
-      await updateMember(activeModalMember._id, formData);
-      showToast(`Member '${formData.name}' updated!`);
+      await updateTeamMember(activeModalMember._id, formData);
     } else {
-      await addMember(formData);
-      showToast(`Member '${formData.name}' added to workspace!`);
+      await createTeamMember(formData);
     }
   };
 
   const handleConfirmDelete = async () => {
     if (!memberToDelete) return;
     try {
-      await removeMember(memberToDelete._id);
-      showToast(`Team member '${memberToDelete.name}' removed!`);
+      await deleteTeamMember(memberToDelete._id, memberToDelete.name);
       setMemberToDelete(null);
     } catch (err) {
-      showToast(err.message || 'Failed to remove member', 'error');
+      console.error(err);
     }
   };
 

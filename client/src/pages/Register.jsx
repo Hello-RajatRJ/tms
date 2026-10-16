@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { useAuthStore } from '../store/useAuthStore';
 import {
   CheckSquare2,
   Lock,
@@ -24,7 +24,7 @@ export const Register = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const { register } = useAuth();
+  const { register } = useAuthStore();
   const navigate = useNavigate();
 
   const handleChange = (e) => {

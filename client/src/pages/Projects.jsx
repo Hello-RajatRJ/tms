@@ -10,53 +10,43 @@ import {
   Trash2,
   CheckCircle,
 } from 'lucide-react';
-import { useProjects } from '../hooks/useProjects';
-import { teamMemberService } from '../services/api';
 import ProjectCard from '../components/ProjectCard';
 import ProjectForm from '../components/ProjectForm';
 import StatusBadge from '../components/StatusBadge';
 import { CardSkeletonGrid, ErrorState, EmptyState } from '../components/LoadingState';
-import { useAuth } from '../context/AuthContext';
+import { useAuthStore } from '../store/useAuthStore';
+import { useProjectStore } from '../store/useProjectStore';
+import { useTeamMemberStore } from '../store/useTeamMemberStore';
 
 export const Projects = () => {
-  const { canManage, isAdmin, user } = useAuth();
+  const { canManage, isAdmin, user } = useAuthStore();
+  const {
+    projects,
+    loading,
+    error,
+    toast,
+    fetchProjects,
+    createProject,
+    updateProject,
+    deleteProject,
+    updateProjectStatus,
+  } = useProjectStore();
+
+  const { teamMembers, fetchTeamMembers } = useTeamMemberStore();
+
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('All');
   const [selectedPriority, setSelectedPriority] = useState('All');
   const [viewMode, setViewMode] = useState('grid'); // 'grid' | 'table'
 
-  const [allMembers, setAllMembers] = useState([]);
   const [activeModalProject, setActiveModalProject] = useState(null); // null = closed, {} = create, project = edit
   const [projectToDelete, setProjectToDelete] = useState(null);
-  const [toast, setToast] = useState(null);
 
-  const {
-    projects,
-    loading,
-    error,
-    refetch,
-    addProject,
-    updateProject,
-    removeProject,
-  } = useProjects();
-
-  // Load team members for assignments
+  // Initial load
   useEffect(() => {
-    const loadMembers = async () => {
-      try {
-        const res = await teamMemberService.getAll();
-        setAllMembers(res.data || []);
-      } catch (err) {
-        console.error('Failed to load team members:', err);
-      }
-    };
-    loadMembers();
-  }, []);
-
-  const showToast = (message, type = 'success') => {
-    setToast({ message, type });
-    setTimeout(() => setToast(null), 4000);
-  };
+    fetchProjects();
+    fetchTeamMembers();
+  }, [fetchProjects, fetchTeamMembers]);
 
   // Filter projects locally for instant responsiveness
   const filteredProjects = useMemo(() => {
@@ -77,31 +67,23 @@ export const Projects = () => {
   const handleSaveProject = async (data) => {
     if (activeModalProject && activeModalProject._id) {
       await updateProject(activeModalProject._id, data);
-      showToast(`Project '${data.title}' updated successfully!`);
     } else {
-      await addProject(data);
-      showToast(`Project '${data.title}' created successfully!`);
+      await createProject(data);
     }
   };
 
   const handleConfirmDelete = async () => {
     if (!projectToDelete) return;
     try {
-      await removeProject(projectToDelete._id);
-      showToast(`Project '${projectToDelete.title}' deleted successfully!`, 'info');
+      await deleteProject(projectToDelete._id);
       setProjectToDelete(null);
     } catch (err) {
-      showToast(err.message || 'Failed to delete project', 'error');
+      console.error(err);
     }
   };
 
   const handleStatusChange = async (projectId, newStatus) => {
-    try {
-      await updateProject(projectId, { status: newStatus });
-      showToast(`Project marked as ${newStatus}!`);
-    } catch (err) {
-      showToast(err.message || 'Failed to update status', 'error');
-    }
+    await updateProjectStatus(projectId, newStatus);
   };
 
   return (
@@ -352,7 +334,7 @@ export const Projects = () => {
       {activeModalProject !== null && (
         <ProjectForm
           project={activeModalProject._id ? activeModalProject : null}
-          allMembers={allMembers}
+          allMembers={teamMembers}
           onClose={() => setActiveModalProject(null)}
           onSubmit={handleSaveProject}
         />

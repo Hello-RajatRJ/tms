@@ -14,12 +14,12 @@ import {
   User,
 } from 'lucide-react';
 import { checkHealth } from '../services/api';
-import { useAuth } from '../context/AuthContext';
+import { useAuthStore } from '../store/useAuthStore';
 
 export const Sidebar = () => {
   const [serverOnline, setServerOnline] = useState(null);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const { user, logout } = useAuth();
+  const { user, logout } = useAuthStore();
 
   useEffect(() => {
     const pingServer = async () => {

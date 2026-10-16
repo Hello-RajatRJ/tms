@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { useAuthStore } from '../store/useAuthStore';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
 
@@ -10,75 +11,87 @@ const api = axios.create({
   timeout: 15000,
 });
 
-// Request Interceptor: Attach JWT Bearer Token
+/* ==========================================================================
+   AXIOS REQUEST INTERCEPTOR
+   - Dynamically pulls JWT token from Zustand Auth Store
+   - Attaches Authorization Bearer header
+   - Adds custom request timestamp
+   ========================================================================== */
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('tms_token');
+    // Read token dynamically from Zustand state
+    const token = useAuthStore.getState().token;
+
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+
+    config.headers['X-Request-Time'] = new Date().toISOString();
+
+    if (import.meta.env.DEV) {
+      console.log(`[API Request] 🚀 ${config.method?.toUpperCase()} ${config.url}`);
+    }
+
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => {
+    console.error('[API Request Error]', error);
+    return Promise.reject(error);
+  }
 );
 
-// Response Interceptor: Extract clean error messages and handle 401
+/* ==========================================================================
+   AXIOS RESPONSE INTERCEPTOR
+   - Automatically unwraps response payload
+   - Handles 401 Unauthorized by clearing Zustand Auth Store
+   - Formats user-friendly error messages from backend validation
+   ========================================================================== */
 api.interceptors.response.use(
-  (response) => response.data,
+  (response) => {
+    // Unwraps response.data directly
+    return response.data;
+  },
   (error) => {
     let errorMessage = 'An unexpected error occurred. Please try again.';
 
+    // 1. Handle 401 Unauthorized (Session Expired / Token Invalid)
     if (error.response?.status === 401) {
-      // Don't auto-clear if this was a login attempt failure
-      if (!error.config?.url?.includes('/auth/login')) {
-        localStorage.removeItem('tms_token');
-        localStorage.removeItem('tms_user');
+      const isLoginRequest = error.config?.url?.includes('/auth/login');
+      if (!isLoginRequest) {
+        console.warn('[API Auth Interceptor] ⚠️ Session expired. Logging out via Zustand store...');
+        useAuthStore.getState().logout();
       }
     }
 
+    // 2. Extract structured backend errors
     if (error.response?.data) {
       const data = error.response.data;
+
       if (data.message) {
         errorMessage = data.message;
       }
-      if (data.errors && Array.isArray(data.errors) && data.errors.length > 0) {
-        const fieldErrors = data.errors.map((e) => `${e.field ? `${e.field}: ` : ''}${e.message}`).join(', ');
-        errorMessage = `${errorMessage} (${fieldErrors})`;
+
+      // Handle Zod / Mongoose structured field errors
+      if (Array.isArray(data.errors) && data.errors.length > 0) {
+        const fieldDetails = data.errors
+          .map((e) => (e.field ? `${e.field}: ${e.message}` : e.message))
+          .join(', ');
+        errorMessage = `${errorMessage} (${fieldDetails})`;
       }
     } else if (error.message) {
       errorMessage = error.message;
     }
+
+    if (import.meta.env.DEV) {
+      console.error(`[API Response Error] ❌ ${error.config?.url || ''}:`, errorMessage);
+    }
+
     return Promise.reject(new Error(errorMessage));
   }
 );
 
-// Authentication Endpoints
-export const authService = {
-  login: (credentials) => api.post('/auth/login', credentials),
-  register: (userData) => api.post('/auth/register', userData),
-  getMe: () => api.get('/auth/me'),
-};
-
-// Project Endpoints
-export const projectService = {
-  getAll: (params = {}) => api.get('/projects', { params }),
-  getStats: () => api.get('/projects/stats'),
-  getById: (id) => api.get(`/projects/${id}`),
-  create: (projectData) => api.post('/projects', projectData),
-  update: (id, projectData) => api.patch(`/projects/${id}`, projectData),
-  delete: (id) => api.delete(`/projects/${id}`),
-};
-
-// Team Member Endpoints
-export const teamMemberService = {
-  getAll: (params = {}) => api.get('/team-members', { params }),
-  getById: (id) => api.get(`/team-members/${id}`),
-  create: (memberData) => api.post('/team-members', memberData),
-  update: (id, memberData) => api.patch(`/team-members/${id}`, memberData),
-  delete: (id) => api.delete(`/team-members/${id}`),
-};
-
 // Health Check
 export const checkHealth = () => api.get('/health');
 
+// Export configured Axios instance
 export default api;

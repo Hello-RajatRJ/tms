@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider, useAuth } from './context/AuthContext';
+import { useAuthStore } from './store/useAuthStore';
 import ProtectedRoute from './components/ProtectedRoute';
 import Sidebar from './components/Sidebar';
 import Dashboard from './pages/Dashboard';
@@ -13,7 +13,7 @@ import { Moon, Sun, Shield, Briefcase, User as UserIcon } from 'lucide-react';
 // Authenticated Layout Wrapper
 const AppLayout = () => {
   const [darkMode, setDarkMode] = useState(false);
-  const { user } = useAuth();
+  const { user } = useAuthStore();
 
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
@@ -118,23 +118,21 @@ const AppLayout = () => {
 export const App = () => {
   return (
     <BrowserRouter>
-      <AuthProvider>
-        <Routes>
-          {/* Public Auth Routes */}
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+      <Routes>
+        {/* Public Auth Routes */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
 
-          {/* Protected Application Routes */}
-          <Route
-            path="/*"
-            element={
-              <ProtectedRoute>
-                <AppLayout />
-              </ProtectedRoute>
-            }
-          />
-        </Routes>
-      </AuthProvider>
+        {/* Protected Application Routes */}
+        <Route
+          path="/*"
+          element={
+            <ProtectedRoute>
+              <AppLayout />
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
     </BrowserRouter>
   );
 };

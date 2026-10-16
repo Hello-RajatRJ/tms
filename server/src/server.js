@@ -13,26 +13,101 @@ import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Middleware
-app.use(
-  cors({
-    origin: '*', // Allow all in dev / configurable for production
-    methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-  })
-);
+// Universal CORS Configuration - Allows all origins, methods, and headers
+const corsOptions = {
+  origin: (origin, callback) => {
+    // Dynamically reflect origin to support any client origin with credentials
+    callback(null, true);
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS', 'HEAD'],
+  allowedHeaders: [
+    'Content-Type',
+    'Authorization',
+    'X-Requested-With',
+    'Accept',
+    'Origin',
+    'X-Request-Time',
+    'Access-Control-Request-Method',
+    'Access-Control-Request-Headers',
+  ],
+  exposedHeaders: ['Authorization'],
+  optionsSuccessStatus: 204,
+};
+
+app.use(cors(corsOptions));
+
+// Explicit manual preflight fallback & CORS header enforcement
+app.use((req, res, next) => {
+  const reqOrigin = req.headers.origin || '*';
+  res.header('Access-Control-Allow-Origin', reqOrigin);
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS, HEAD');
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept, Authorization, X-Request-Time, Access-Control-Request-Method, Access-Control-Request-Headers'
+  );
+
+  if (req.method === 'OPTIONS') {
+    return res.status(204).end();
+  }
+  next();
+});
+
 app.use(express.json());
 if (process.env.NODE_ENV !== 'test') {
   app.use(morgan('dev'));
 }
 
-// Health Check Endpoint
+// Root & Health Check Endpoints
+app.get('/', (req, res) => {
+  res.status(200).json({
+    message: '🚀 TMS (Task Management System) API Server is Running',
+    cors: 'Allowed for all origins (*)',
+    endpoints: {
+      health: '/api/health',
+      auth: {
+        login: 'POST /api/auth/login',
+        register: 'POST /api/auth/register',
+        me: 'GET /api/auth/me',
+      },
+      projects: '/api/projects',
+      teamMembers: '/api/team-members',
+    },
+  });
+});
+
+app.get('/api', (req, res) => {
+  res.status(200).json({
+    message: 'TMS API Root',
+    cors: 'Allowed for all origins (*)',
+    endpoints: {
+      health: '/api/health',
+      login: 'POST /api/auth/login',
+      projects: '/api/projects',
+      teamMembers: '/api/team-members',
+    },
+  });
+});
+
 app.get('/api/health', (req, res) => {
   res.status(200).json({
     status: 'healthy',
     timestamp: new Date().toISOString(),
     uptime: process.uptime(),
     database: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected',
+  });
+});
+
+// Friendly GET helper for login endpoint if visited via browser URL bar
+app.get('/api/auth/login', (req, res) => {
+  res.status(200).json({
+    message: 'TMS Auth Login Endpoint: Please send a POST request with JSON payload { email, password }.',
+    example: {
+      method: 'POST',
+      url: '/api/auth/login',
+      body: { email: 'admin@tms.io', password: 'YourPassword123' },
+    },
   });
 });
 

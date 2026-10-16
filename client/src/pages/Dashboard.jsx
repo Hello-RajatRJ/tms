@@ -12,39 +12,36 @@ import {
   DollarSign,
   Briefcase,
 } from 'lucide-react';
-import { projectService, teamMemberService } from '../services/api';
 import StatusBadge from '../components/StatusBadge';
 import { LoadingState, ErrorState } from '../components/LoadingState';
 import ProjectForm from '../components/ProjectForm';
-import { useAuth } from '../context/AuthContext';
+import { useAuthStore } from '../store/useAuthStore';
+import { useProjectStore } from '../store/useProjectStore';
+import { useTeamMemberStore } from '../store/useTeamMemberStore';
 
 export const Dashboard = () => {
-  const { canManage } = useAuth();
-  const [stats, setStats] = useState(null);
-  const [recentProjects, setRecentProjects] = useState([]);
-  const [teamMembers, setTeamMembers] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const { canManage } = useAuthStore();
+  const {
+    stats,
+    projects,
+    statsLoading,
+    loading: projectsLoading,
+    error,
+    fetchStats,
+    fetchProjects,
+    createProject,
+    updateProjectStatus,
+  } = useProjectStore();
+
+  const { teamMembers, fetchTeamMembers } = useTeamMemberStore();
   const [showCreateModal, setShowCreateModal] = useState(false);
 
   const fetchDashboardData = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const [statsRes, projectsRes, membersRes] = await Promise.all([
-        projectService.getStats(),
-        projectService.getAll({ sort: 'createdAt:desc' }),
-        teamMemberService.getAll(),
-      ]);
-
-      setStats(statsRes.data);
-      setRecentProjects(projectsRes.data ? projectsRes.data.slice(0, 5) : []);
-      setTeamMembers(membersRes.data || []);
-    } catch (err) {
-      setError(err.message || 'Failed to load dashboard metrics');
-    } finally {
-      setLoading(false);
-    }
+    await Promise.all([
+      fetchStats(),
+      fetchProjects({ sort: 'createdAt:desc' }),
+      fetchTeamMembers(),
+    ]);
   };
 
   useEffect(() => {
@@ -52,18 +49,15 @@ export const Dashboard = () => {
   }, []);
 
   const handleCreateProject = async (data) => {
-    await projectService.create(data);
-    fetchDashboardData();
+    await createProject(data);
   };
 
   const handleQuickStatusChange = async (projectId, newStatus) => {
-    try {
-      await projectService.update(projectId, { status: newStatus });
-      fetchDashboardData();
-    } catch (err) {
-      alert(err.message || 'Failed to update status');
-    }
+    await updateProjectStatus(projectId, newStatus);
   };
+
+  const recentProjects = projects.slice(0, 5);
+  const loading = statsLoading && projects.length === 0;
 
   if (loading) {
     return <LoadingState message="Loading dashboard insights and analytics..." />;

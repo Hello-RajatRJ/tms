@@ -1,12 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Navigate, useLocation, Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import { ShieldAlert, ArrowLeft, Lock } from 'lucide-react';
+import { useAuthStore } from '../store/useAuthStore';
+import { Lock, ArrowLeft } from 'lucide-react';
 import LoadingState from './LoadingState';
 
 export const ProtectedRoute = ({ children, allowedRoles }) => {
-  const { isAuthenticated, loading, user, hasRole } = useAuth();
+  const { isAuthenticated, loading, user, hasRole, checkAuth } = useAuthStore();
   const location = useLocation();
+
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
 
   if (loading) {
     return (
