@@ -7,11 +7,11 @@ export const connectDB = async () => {
 
   if (mongoUri) {
     try {
-      console.log(`[Database] Attempting connection to MongoDB: ${mongoUri.includes('@') ? 'MongoDB Atlas' : mongoUri}...`);
       const conn = await mongoose.connect(mongoUri, {
-        serverSelectionTimeoutMS: 8000,
+        serverSelectionTimeoutMS: 10000,
+        dbName: 'tms',
       });
-      console.log(`[Database] Successfully connected to MongoDB host: ${conn.connection.host}`);
+      console.log(`[Database] Successfully connected to MongoDB host: ${conn.connection.host} (Database: ${conn.connection.name})`);
       return conn;
     } catch (err) {
       console.error(`[Database] Failed to connect to specified MONGO_URI: ${err.message}`);
