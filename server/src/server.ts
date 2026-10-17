@@ -100,6 +100,41 @@ app.get('/api/auth/login', (_req: Request, res: Response) => {
   });
 });
 
+let isSeeded = false;
+
+const ensureDB = async () => {
+  await connectDB();
+  if (!isSeeded && mongoose.connection.readyState === 1) {
+    try {
+      await seedDatabase();
+      isSeeded = true;
+    } catch (seedErr: any) {
+      console.warn('Database seeding warning:', seedErr?.message || seedErr);
+    }
+  }
+};
+
+// Middleware: ensure database is connected before processing API requests
+app.use('/api', async (req: Request, res: Response, next: NextFunction) => {
+  // Let health check and root api documentation through without waiting for DB
+  if (req.path === '/health' || req.path === '/' || req.path === '') {
+    return next();
+  }
+
+  try {
+    await ensureDB();
+    next();
+  } catch (err: any) {
+    return res.status(503).json({
+      success: false,
+      message: err.message || 'Database connection error',
+      help: process.env.VERCEL
+        ? 'Please verify: 1) MONGO_URI is added in Vercel Environment Variables. 2) In MongoDB Atlas -> Network Access, 0.0.0.0/0 (Allow from Anywhere) is added.'
+        : undefined,
+    });
+  }
+});
+
 app.use('/api/auth', authRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/team-members', teamMemberRoutes);
@@ -109,27 +144,6 @@ app.post('/api/seed', async (req: Request, res: Response, next: NextFunction) =>
     const force = req.query.force === 'true' || req.body?.force === true;
     await seedDatabase(force);
     res.status(200).json({ success: true, message: 'Database seeded successfully', force });
-  } catch (err) {
-    next(err);
-  }
-});
-
-let dbPromise: Promise<void> | null = null;
-
-const ensureDB = async () => {
-  if (!dbPromise) {
-    dbPromise = (async () => {
-      await connectDB();
-      await seedDatabase();
-    })();
-  }
-  return dbPromise;
-};
-
-app.use(async (_req: Request, _res: Response, next: NextFunction) => {
-  try {
-    await ensureDB();
-    next();
   } catch (err) {
     next(err);
   }
