@@ -2,6 +2,10 @@ import mongoose from 'mongoose';
 
 let memoryServer: any = null;
 
+/**
+ * Establishes database connection with automatic in-memory fallback
+ * if the remote MongoDB URI is unreachable or not configured.
+ */
 export const connectDB = async (): Promise<typeof mongoose> => {
   const mongoUri = process.env.MONGO_URI?.trim();
 
@@ -22,6 +26,9 @@ export const connectDB = async (): Promise<typeof mongoose> => {
   });
 };
 
+/**
+ * Closes active MongoDB connections and stops any in-memory server instances.
+ */
 export const disconnectDB = async (): Promise<void> => {
   await mongoose.disconnect();
   if (memoryServer) {

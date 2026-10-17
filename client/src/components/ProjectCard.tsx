@@ -17,6 +17,10 @@ interface ProjectCardProps {
   onStatusChange?: (id: string, newStatus: string) => void;
 }
 
+/**
+ * Displays project summary card with progress indicators, deadlines,
+ * assigned team members, and role-authorized action menus.
+ */
 export const ProjectCard: React.FC<ProjectCardProps> = ({
   project,
   onEdit,

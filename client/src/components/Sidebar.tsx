@@ -13,6 +13,9 @@ import { useAuthStore } from '../store/useAuthStore';
 import ThemeToggle from './ThemeToggle';
 import ProfileMenu from './ProfileMenu';
 
+/**
+ * Primary navigation sidebar for desktop and collapsible drawer for mobile viewports.
+ */
 export const Sidebar: React.FC = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { user, logout } = useAuthStore();

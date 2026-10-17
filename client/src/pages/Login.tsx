@@ -14,6 +14,9 @@ import {
 } from 'lucide-react';
 import ThemeToggle from '../components/ThemeToggle';
 
+/**
+ * Workspace sign-in page providing credential authentication and one-click role demo logins.
+ */
 export const Login: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

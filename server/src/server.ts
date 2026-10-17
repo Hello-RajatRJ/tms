@@ -117,6 +117,10 @@ app.post('/api/seed', async (req: Request, res: Response, next: NextFunction) =>
 app.use(notFoundHandler);
 app.use(errorHandler);
 
+/**
+ * Initializes the database connection, ensures initial reference data,
+ * and starts the HTTP server listener.
+ */
 const startServer = async () => {
   try {
     await connectDB();

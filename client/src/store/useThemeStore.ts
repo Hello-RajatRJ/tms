@@ -20,6 +20,9 @@ const applyThemeToDOM = (theme: ThemeMode) => {
   }
 };
 
+/**
+ * Manages UI theme mode (light/dark) and synchronizes with document classList and localStorage.
+ */
 export const useThemeStore = create<ThemeState>()(
   persist(
     (set) => ({

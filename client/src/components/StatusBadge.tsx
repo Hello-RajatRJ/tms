@@ -7,6 +7,9 @@ interface StatusBadgeProps {
   className?: string;
 }
 
+/**
+ * Renders standardized color-coded status, priority, and role pill indicators.
+ */
 export const StatusBadge: React.FC<StatusBadgeProps> = ({
   value,
   type = 'status',

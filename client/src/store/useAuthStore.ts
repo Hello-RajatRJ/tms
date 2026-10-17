@@ -18,6 +18,10 @@ interface AuthState {
   canManage: () => boolean;
 }
 
+/**
+ * Global authentication store managing session persistence,
+ * credentials, and role-based access utilities.
+ */
 export const useAuthStore = create<AuthState>()(
   persist(
     (set, get) => ({

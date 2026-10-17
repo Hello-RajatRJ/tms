@@ -10,6 +10,9 @@ interface ProtectedRouteProps {
   allowedRoles?: UserRole[];
 }
 
+/**
+ * Route guard component ensuring authenticated session and verifying allowed user roles.
+ */
 export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, allowedRoles }) => {
   const { isAuthenticated, loading, user, hasRole, checkAuth } = useAuthStore();
   const location = useLocation();

@@ -2,6 +2,9 @@ import { Request, Response, NextFunction } from 'express';
 import { TeamMember } from '../models/TeamMember';
 import { Project } from '../models/Project';
 
+/**
+ * Lists team members with optional filtering by status/department and search query.
+ */
 export const getTeamMembers = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const { search, status, department } = req.query as {
@@ -51,6 +54,9 @@ export const getTeamMembers = async (req: Request, res: Response, next: NextFunc
   }
 };
 
+/**
+ * Retrieves a team member profile along with their currently assigned projects.
+ */
 export const getTeamMemberById = async (req: Request, res: Response, next: NextFunction): Promise<void | Response> => {
   try {
     const member = await TeamMember.findById(req.params.id);
@@ -79,6 +85,9 @@ export const getTeamMemberById = async (req: Request, res: Response, next: NextF
   }
 };
 
+/**
+ * Adds a new team member to the workspace registry.
+ */
 export const createTeamMember = async (req: Request, res: Response, next: NextFunction): Promise<void | Response> => {
   try {
     const { email } = req.body;
@@ -102,6 +111,9 @@ export const createTeamMember = async (req: Request, res: Response, next: NextFu
   }
 };
 
+/**
+ * Updates an existing team member's role, contact info, status, or skills.
+ */
 export const updateTeamMember = async (req: Request, res: Response, next: NextFunction): Promise<void | Response> => {
   try {
     if (req.body.email) {
@@ -140,6 +152,9 @@ export const updateTeamMember = async (req: Request, res: Response, next: NextFu
   }
 };
 
+/**
+ * Removes a team member and automatically unassigns them from all active projects.
+ */
 export const deleteTeamMember = async (req: Request, res: Response, next: NextFunction): Promise<void | Response> => {
   try {
     const member = await TeamMember.findById(req.params.id);

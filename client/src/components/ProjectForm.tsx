@@ -23,6 +23,9 @@ interface FormDataState {
   teamMembers: string[];
 }
 
+/**
+ * Modal form modal for creating new workspace projects or editing existing ones.
+ */
 export const ProjectForm: React.FC<ProjectFormProps> = ({
   project = null,
   allMembers = [],

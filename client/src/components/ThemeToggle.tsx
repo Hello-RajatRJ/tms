@@ -6,6 +6,9 @@ interface ThemeToggleProps {
   className?: string;
 }
 
+/**
+ * Interactive toggle switch for switching between light and dark visual themes.
+ */
 export const ThemeToggle: React.FC<ThemeToggleProps> = ({ className = '' }) => {
   const { theme, toggleTheme } = useThemeStore();
   const isDark = theme === 'dark';

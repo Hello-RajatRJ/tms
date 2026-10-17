@@ -13,6 +13,9 @@ import {
 } from 'lucide-react';
 import ThemeToggle from '../components/ThemeToggle';
 
+/**
+ * User onboarding page for registering a new workspace account with assigned initial role.
+ */
 export const Register: React.FC = () => {
   const [formData, setFormData] = useState({
     name: '',

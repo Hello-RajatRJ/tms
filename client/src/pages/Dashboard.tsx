@@ -25,6 +25,10 @@ import ThemeToggle from '../components/ThemeToggle';
 import ProfileMenu from '../components/ProfileMenu';
 import ProjectForm from '../components/ProjectForm';
 
+/**
+ * Main analytics dashboard summarizing active projects, status distribution,
+ * team workloads, and recent deliverables.
+ */
 export const Dashboard: React.FC = () => {
   const [stats, setStats] = useState<ProjectStats | null>(null);
   const [recentProjects, setRecentProjects] = useState<Project[]>([]);

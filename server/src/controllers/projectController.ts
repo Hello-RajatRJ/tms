@@ -2,6 +2,9 @@ import { Request, Response, NextFunction } from 'express';
 import { Project } from '../models/Project';
 import { TeamMember } from '../models/TeamMember';
 
+/**
+ * Retrieves projects with dynamic filtering, text search, and sorting.
+ */
 export const getProjects = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const { status, priority, category, search, sort = 'createdAt:desc' } = req.query as {
@@ -55,6 +58,9 @@ export const getProjects = async (req: Request, res: Response, next: NextFunctio
   }
 };
 
+/**
+ * Calculates aggregated dashboard statistics across projects, budgets, and team allocations.
+ */
 export const getProjectStats = async (_req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const totalProjects = await Project.countDocuments();
@@ -127,6 +133,9 @@ export const getProjectStats = async (_req: Request, res: Response, next: NextFu
   }
 };
 
+/**
+ * Retrieves a single project record by its unique identifier.
+ */
 export const getProjectById = async (req: Request, res: Response, next: NextFunction): Promise<void | Response> => {
   try {
     const project = await Project.findById(req.params.id).populate(
@@ -150,6 +159,9 @@ export const getProjectById = async (req: Request, res: Response, next: NextFunc
   }
 };
 
+/**
+ * Creates a new project and links assigned team member IDs.
+ */
 export const createProject = async (req: Request, res: Response, next: NextFunction): Promise<void | Response> => {
   try {
     if (req.body.teamMembers && req.body.teamMembers.length > 0) {
@@ -178,6 +190,9 @@ export const createProject = async (req: Request, res: Response, next: NextFunct
   }
 };
 
+/**
+ * Updates an existing project record with partial or full field updates.
+ */
 export const updateProject = async (req: Request, res: Response, next: NextFunction): Promise<void | Response> => {
   try {
     if (req.body.teamMembers && req.body.teamMembers.length > 0) {
@@ -213,6 +228,9 @@ export const updateProject = async (req: Request, res: Response, next: NextFunct
   }
 };
 
+/**
+ * Deletes a project record from the database.
+ */
 export const deleteProject = async (req: Request, res: Response, next: NextFunction): Promise<void | Response> => {
   try {
     const project = await Project.findById(req.params.id);

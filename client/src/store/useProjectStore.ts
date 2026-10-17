@@ -32,6 +32,10 @@ interface ProjectState {
   deleteProject: (id: string) => Promise<void>;
 }
 
+/**
+ * Centralized store managing workspace projects, dashboard metrics,
+ * active filters, and toast notifications.
+ */
 export const useProjectStore = create<ProjectState>((set, get) => ({
   projects: [],
   stats: null,

@@ -18,6 +18,10 @@ import { useProjectStore } from '../store/useProjectStore';
 import { useTeamMemberStore } from '../store/useTeamMemberStore';
 import type { Project } from '../types';
 
+/**
+ * Workspace projects directory page with search, multi-criteria filters,
+ * and CRUD modal workflows.
+ */
 export const Projects: React.FC = () => {
   const { canManage, isAdmin, user } = useAuthStore();
   const {

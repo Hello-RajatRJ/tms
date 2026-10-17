@@ -10,6 +10,10 @@ import {
 import { useAuthStore } from '../store/useAuthStore';
 import { useThemeStore } from '../store/useThemeStore';
 
+/**
+ * User account dropdown offering profile details, role permissions,
+ * theme toggle, and sign-out controls.
+ */
 export const ProfileMenu: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);

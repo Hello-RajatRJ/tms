@@ -6,6 +6,9 @@ export interface AuthenticatedRequest extends Request {
   user?: IUserDocument;
 }
 
+/**
+ * Validates incoming Bearer JWT tokens and attaches authenticated user to the request.
+ */
 export const protect = async (
   req: AuthenticatedRequest,
   res: Response,
@@ -49,6 +52,9 @@ export const protect = async (
   }
 };
 
+/**
+ * Enforces role-based permissions against authenticated user claims.
+ */
 export const authorize = (...roles: string[]) => {
   return (req: AuthenticatedRequest, res: Response, next: NextFunction): void | Response => {
     if (!req.user) {

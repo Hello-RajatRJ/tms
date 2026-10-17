@@ -3,6 +3,9 @@ import { useAuthStore } from '../store/useAuthStore';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
 
+/**
+ * Pre-configured Axios instance for communicating with the TMS REST API.
+ */
 const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
@@ -11,6 +14,9 @@ const api = axios.create({
   timeout: 15000,
 });
 
+/**
+ * Injects current JWT token from the auth store into outgoing requests.
+ */
 api.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     const token = useAuthStore.getState().token;
@@ -25,6 +31,9 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
+/**
+ * Unwraps response payloads and normalizes API error responses.
+ */
 api.interceptors.response.use(
   (response: AxiosResponse) => response.data,
   (error: any) => {

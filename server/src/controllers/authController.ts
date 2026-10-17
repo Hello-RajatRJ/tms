@@ -11,6 +11,9 @@ const generateToken = (user: IUserDocument): string => {
   );
 };
 
+/**
+ * Registers a new user account with hashed password and returns an auth token.
+ */
 export const register = async (req: Request, res: Response, next: NextFunction): Promise<void | Response> => {
   try {
     const { name, email, password, role = 'member', title = 'Team Member' } = req.body;
@@ -67,6 +70,9 @@ export const register = async (req: Request, res: Response, next: NextFunction):
   }
 };
 
+/**
+ * Authenticates user credentials and returns a signed JWT session token.
+ */
 export const login = async (req: Request, res: Response, next: NextFunction): Promise<void | Response> => {
   try {
     const { email, password } = req.body;
@@ -114,6 +120,9 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
   }
 };
 
+/**
+ * Retrieves profile information for the currently authenticated session.
+ */
 export const getMe = async (req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void | Response> => {
   try {
     if (!req.user) {

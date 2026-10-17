@@ -1,5 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 
+/**
+ * Handles unmapped route requests with structured 404 responses.
+ */
 export const notFoundHandler = (req: Request, res: Response, _next: NextFunction): void => {
   res.status(404).json({
     success: false,
@@ -7,6 +10,10 @@ export const notFoundHandler = (req: Request, res: Response, _next: NextFunction
   });
 };
 
+/**
+ * Global exception handler transforming Mongoose casting, validation,
+ * duplicate key, and server errors into standard API error envelopes.
+ */
 export const errorHandler = (
   err: any,
   _req: Request,

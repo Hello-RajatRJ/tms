@@ -21,6 +21,9 @@ import { useAuthStore } from '../store/useAuthStore';
 import { useTeamMemberStore } from '../store/useTeamMemberStore';
 import type { TeamMember, TeamStatus } from '../types';
 
+/**
+ * Team directory page listing colleagues, departments, roles, and assigned projects.
+ */
 export const TeamMembers: React.FC = () => {
   const { canManage, isAdmin, user } = useAuthStore();
   const {
