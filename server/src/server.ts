@@ -114,24 +114,44 @@ app.post('/api/seed', async (req: Request, res: Response, next: NextFunction) =>
   }
 });
 
+let dbPromise: Promise<void> | null = null;
+
+const ensureDB = async () => {
+  if (!dbPromise) {
+    dbPromise = (async () => {
+      await connectDB();
+      await seedDatabase();
+    })();
+  }
+  return dbPromise;
+};
+
+app.use(async (_req: Request, _res: Response, next: NextFunction) => {
+  try {
+    await ensureDB();
+    next();
+  } catch (err) {
+    next(err);
+  }
+});
+
 app.use(notFoundHandler);
 app.use(errorHandler);
 
 /**
- * Initializes the database connection, ensures initial reference data,
- * and starts the HTTP server listener.
+ * Initializes database and starts HTTP server listener when running in standalone mode.
  */
 const startServer = async () => {
   try {
-    await connectDB();
-    await seedDatabase();
-
+    await ensureDB();
     app.listen(PORT);
   } catch {
     process.exit(1);
   }
 };
 
-startServer();
+if (!process.env.VERCEL) {
+  startServer();
+}
 
 export default app;
