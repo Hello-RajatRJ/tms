@@ -62,6 +62,17 @@ Network requests are routed through a configured Axios instance with automated i
 
 ---
 
+## 🎨 Theme & UI Features
+
+- **🌙 Dark & Light Mode**: Persisted via Zustand store (`useThemeStore`), synchronized with the DOM `<html>` element and smooth color transitions.
+- **📊 Animated Analytics**:
+  - Eased animated numeric counters for total projects, completed projects, active sprint counts, and team sizes.
+  - Circular SVG portfolio velocity gauge displaying average project progress.
+  - Dynamic status lifecycle progress bars and priority severity cards.
+- **👤 Profile Section & Logout**: Top-header user pill showing avatar, display name, and role badge. Expands into a dropdown menu detailing permissions, appearance controls, and a dedicated Sign Out button.
+
+---
+
 ## 🔐 Role-Based Access Control (RBAC)
 
 The application enforces role permissions at both the route level and the component level:
@@ -72,15 +83,20 @@ The application enforces role permissions at both the route level and the compon
 
 ---
 
-## 🚀 Running the Client
+## 🚀 Running the System
 
+### Backend (Server)
 ```bash
-# Install dependencies
+cd server
 npm install
+npm run dev    # Starts with tsx watch
+npm run build  # Compiles with tsc
+```
 
-# Start Vite dev server
-npm run dev
-
-# Production build
-npm run build
+### Frontend (Client)
+```bash
+cd client
+npm install
+npm run dev    # Starts Vite dev server
+npm run build  # Builds production bundle
 ```
