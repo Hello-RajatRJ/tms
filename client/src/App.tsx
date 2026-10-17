@@ -11,7 +11,7 @@ import Register from './pages/Register';
 // Authenticated Layout Wrapper
 const AppLayout: React.FC = () => {
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col lg:flex-row font-sans transition-colors duration-200">
+    <div className="min-h-screen bg-[#F0F2F5] dark:bg-[#111B21] flex flex-col lg:flex-row font-sans transition-colors duration-200">
       {/* Left Sidebar */}
       <Sidebar />
 

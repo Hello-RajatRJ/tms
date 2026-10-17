@@ -61,7 +61,7 @@ export const Login: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-slate-50 dark:bg-slate-950 transition-colors duration-200 relative">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-[#F0F2F5] dark:bg-[#111B21] transition-colors duration-200 relative">
       <div className="absolute top-6 right-6">
         <ThemeToggle />
       </div>
@@ -69,56 +69,59 @@ export const Login: React.FC = () => {
       <div className="w-full max-w-md space-y-6">
         {/* Brand Header */}
         <div className="text-center space-y-2">
-          <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-purple-600 flex items-center justify-center text-white mx-auto shadow-lg shadow-indigo-500/25">
+          <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-[#075E54] via-[#128C7E] to-[#25D366] flex items-center justify-center text-white mx-auto shadow-lg shadow-[#00A884]/25">
             <CheckSquare2 className="w-8 h-8 stroke-[2.5]" />
           </div>
-          <h1 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+          <h1 className="text-2xl font-black text-[#111B21] dark:text-[#E9EDEF] tracking-tight">
             Welcome to TMS
           </h1>
-          <p className="text-xs text-slate-500 dark:text-slate-400">
+          <p className="text-xs text-[#667781] dark:text-[#8696A0]">
             Sign in to access your projects, team workspace, and tasks.
           </p>
         </div>
 
         {/* Login Card */}
-        <div className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-7 shadow-xl shadow-slate-200/40 dark:shadow-none animate-fade-in space-y-5">
+        <div className="bg-white dark:bg-[#202C33] border border-[#E9EDEF] dark:border-[#2A3942] rounded-3xl p-7 modal-wa-container animate-fade-in space-y-5 overflow-hidden relative">
+          {/* Top Emerald Accent Bar */}
+          <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#075E54] via-[#00A884] to-[#25D366]" />
+
           {error && (
-            <div className="p-3.5 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900 rounded-xl flex items-center gap-2.5 text-xs text-rose-700 dark:text-rose-400">
+            <div className="p-3.5 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900 rounded-2xl flex items-center gap-2.5 text-xs text-rose-700 dark:text-rose-400 mt-2">
               <AlertCircle className="w-4 h-4 shrink-0" />
               <span>{error}</span>
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4 pt-1">
             <div>
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+              <label className="block text-xs font-bold text-[#111B21] dark:text-[#E9EDEF] mb-1.5">
                 Email Address
               </label>
               <div className="relative">
-                <Mail className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                <Mail className="w-4 h-4 text-[#667781] dark:text-[#8696A0] absolute left-3.5 top-1/2 -translate-y-1/2" />
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="name@company.com"
-                  className="w-full pl-10 pr-4 py-2.5 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/40 text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500 transition-colors"
+                  placeholder="admin@tms.io"
+                  className="w-full pl-10 pr-4 py-2.5 text-sm rounded-2xl border border-[#E9EDEF] dark:border-[#2A3942] bg-[#F0F2F5]/70 dark:bg-[#182229]/60 text-[#111B21] dark:text-[#E9EDEF] wa-input"
                   required
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+              <label className="block text-xs font-bold text-[#111B21] dark:text-[#E9EDEF] mb-1.5">
                 Password
               </label>
               <div className="relative">
-                <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                <Lock className="w-4 h-4 text-[#667781] dark:text-[#8696A0] absolute left-3.5 top-1/2 -translate-y-1/2" />
                 <input
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full pl-10 pr-4 py-2.5 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/40 text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500 transition-colors"
+                  className="w-full pl-10 pr-4 py-2.5 text-sm rounded-2xl border border-[#E9EDEF] dark:border-[#2A3942] bg-[#F0F2F5]/70 dark:bg-[#182229]/60 text-[#111B21] dark:text-[#E9EDEF] wa-input"
                   required
                 />
               </div>
@@ -127,7 +130,7 @@ export const Login: React.FC = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-2.5 px-4 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl shadow-md shadow-indigo-600/20 hover:shadow-lg transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+              className="wa-btn-primary w-full py-3 px-4 rounded-2xl text-xs font-bold flex items-center justify-center gap-2 disabled:opacity-50"
             >
               {loading ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
@@ -141,50 +144,50 @@ export const Login: React.FC = () => {
           </form>
 
           {/* Quick Demo Login Chips */}
-          <div className="pt-4 border-t border-slate-100 dark:border-slate-800 space-y-2">
-            <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400 text-center">
+          <div className="pt-4 border-t border-[#E9EDEF] dark:border-[#2A3942] space-y-2">
+            <p className="text-[11px] font-bold uppercase tracking-wider text-[#667781] dark:text-[#8696A0] text-center">
               ⚡ 1-Click Quick Demo Login
             </p>
             <div className="grid grid-cols-3 gap-2">
               <button
                 type="button"
                 onClick={() => handleQuickDemoLogin('admin@tms.io', 'Admin@123')}
-                className="p-2 rounded-xl border border-indigo-200 dark:border-indigo-900/60 bg-indigo-50/60 dark:bg-indigo-950/40 hover:bg-indigo-100/80 text-center transition-all group"
+                className="p-2.5 rounded-2xl border border-[#00A884]/30 bg-[#E7F8F0] dark:bg-[#075E54]/40 hover:bg-[#00A884]/20 text-center transition-all group"
               >
-                <ShieldCheck className="w-4 h-4 text-indigo-600 dark:text-indigo-400 mx-auto mb-1 group-hover:scale-110 transition-transform" />
-                <p className="text-[11px] font-bold text-indigo-950 dark:text-indigo-200 leading-tight">Admin</p>
-                <p className="text-[9px] text-indigo-600 dark:text-indigo-400 font-medium">Full Access</p>
+                <ShieldCheck className="w-4 h-4 text-[#00A884] dark:text-[#25D366] mx-auto mb-1 group-hover:scale-110 transition-transform" />
+                <p className="text-[11px] font-bold text-[#111B21] dark:text-[#E9EDEF] leading-tight">Admin</p>
+                <p className="text-[9px] text-[#00A884] dark:text-[#25D366] font-semibold">Full Access</p>
               </button>
 
               <button
                 type="button"
                 onClick={() => handleQuickDemoLogin('manager@tms.io', 'Manager@123')}
-                className="p-2 rounded-xl border border-sky-200 dark:border-sky-900/60 bg-sky-50/60 dark:bg-sky-950/40 hover:bg-sky-100/80 text-center transition-all group"
+                className="p-2.5 rounded-2xl border border-[#128C7E]/30 bg-[#F0F2F5] dark:bg-[#202C33] hover:bg-[#E9EDEF] dark:hover:bg-[#2A3942] text-center transition-all group"
               >
-                <Briefcase className="w-4 h-4 text-sky-600 dark:text-sky-400 mx-auto mb-1 group-hover:scale-110 transition-transform" />
-                <p className="text-[11px] font-bold text-sky-950 dark:text-sky-200 leading-tight">Manager</p>
-                <p className="text-[9px] text-sky-600 dark:text-sky-400 font-medium">Projects Lead</p>
+                <Briefcase className="w-4 h-4 text-[#128C7E] dark:text-[#25D366] mx-auto mb-1 group-hover:scale-110 transition-transform" />
+                <p className="text-[11px] font-bold text-[#111B21] dark:text-[#E9EDEF] leading-tight">Manager</p>
+                <p className="text-[9px] text-[#128C7E] dark:text-[#25D366] font-semibold">Projects Lead</p>
               </button>
 
               <button
                 type="button"
                 onClick={() => handleQuickDemoLogin('member@tms.io', 'Member@123')}
-                className="p-2 rounded-xl border border-emerald-200 dark:border-emerald-900/60 bg-emerald-50/60 dark:bg-emerald-950/40 hover:bg-emerald-100/80 text-center transition-all group"
+                className="p-2.5 rounded-2xl border border-[#25D366]/30 bg-[#E7F8F0] dark:bg-[#075E54]/30 hover:bg-[#25D366]/20 text-center transition-all group"
               >
-                <UserIcon className="w-4 h-4 text-emerald-600 dark:text-emerald-400 mx-auto mb-1 group-hover:scale-110 transition-transform" />
-                <p className="text-[11px] font-bold text-emerald-950 dark:text-emerald-200 leading-tight">Member</p>
-                <p className="text-[9px] text-emerald-600 dark:text-emerald-400 font-medium">Read Only</p>
+                <UserIcon className="w-4 h-4 text-[#00A884] dark:text-[#25D366] mx-auto mb-1 group-hover:scale-110 transition-transform" />
+                <p className="text-[11px] font-bold text-[#111B21] dark:text-[#E9EDEF] leading-tight">Member</p>
+                <p className="text-[9px] text-[#00A884] dark:text-[#25D366] font-semibold">Read Only</p>
               </button>
             </div>
           </div>
         </div>
 
         {/* Sign up prompt */}
-        <p className="text-center text-xs text-slate-500 dark:text-slate-400">
+        <p className="text-center text-xs text-[#667781] dark:text-[#8696A0]">
           Need a new account?{' '}
           <Link
             to="/register"
-            className="font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 underline"
+            className="font-bold text-[#00A884] dark:text-[#25D366] hover:underline"
           >
             Create an account
           </Link>

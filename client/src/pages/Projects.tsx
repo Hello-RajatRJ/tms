@@ -112,35 +112,35 @@ export const Projects: React.FC = () => {
           {canManage() ? (
             <button
               onClick={() => setActiveModalProject({})}
-              className="inline-flex items-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-2xl shadow-sm hover:shadow transition-all hover:scale-[1.02] shrink-0"
+              className="wa-btn-primary inline-flex items-center gap-2 px-5 py-2.5 text-xs font-bold rounded-2xl shrink-0"
             >
               <Plus className="w-4 h-4 stroke-[3]" />
               New Project
             </button>
           ) : (
-            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 text-xs font-semibold border border-slate-200 dark:border-slate-700">
-              Role: <strong className="text-slate-800 dark:text-slate-200 capitalize">{user?.role}</strong> (View Only)
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white dark:bg-[#202C33] text-[#667781] dark:text-[#8696A0] text-xs font-semibold border border-[#E9EDEF] dark:border-[#2A3942]">
+              Role: <strong className="text-[#111B21] dark:text-[#E9EDEF] capitalize">{user?.role}</strong> (View Only)
             </span>
           )}
         </div>
       </div>
 
       {/* Controls: Search, Filters & View Mode */}
-      <div className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-4 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-3">
+      <div className="wa-card rounded-3xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-3">
         {/* Search Input */}
         <div className="relative flex-1">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+          <Search className="w-4 h-4 text-[#667781] dark:text-[#8696A0] absolute left-3.5 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             placeholder="Search projects by title, description or category..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 text-xs rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/40 text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500 transition-colors"
+            className="w-full pl-9 pr-4 py-2 text-xs rounded-2xl border border-[#E9EDEF] dark:border-[#2A3942] bg-[#F0F2F5]/70 dark:bg-[#182229]/60 text-[#111B21] dark:text-[#E9EDEF] wa-input"
           />
           {searchTerm && (
             <button
               onClick={() => setSearchTerm('')}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-400 hover:text-slate-600"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-semibold text-[#00A884] hover:text-[#075E54]"
             >
               Clear
             </button>
@@ -150,12 +150,12 @@ export const Projects: React.FC = () => {
         {/* Filter Dropdowns */}
         <div className="flex items-center gap-2 flex-wrap">
           {/* Status Filter */}
-          <div className="flex items-center gap-1.5 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-2xl px-3 py-2">
-            <span className="text-[11px] font-semibold text-slate-400">Status:</span>
+          <div className="flex items-center gap-1.5 bg-[#F0F2F5]/70 dark:bg-[#182229]/60 border border-[#E9EDEF] dark:border-[#2A3942] rounded-2xl px-3 py-2">
+            <span className="text-[11px] font-bold text-[#667781] dark:text-[#8696A0]">Status:</span>
             <select
               value={selectedStatus}
               onChange={(e) => setSelectedStatus(e.target.value)}
-              className="text-xs font-medium bg-transparent text-slate-800 dark:text-slate-200 focus:outline-none cursor-pointer"
+              className="text-xs font-semibold bg-transparent text-[#111B21] dark:text-[#E9EDEF] focus:outline-none cursor-pointer"
             >
               <option value="All">All Statuses</option>
               <option value="Planning">Planning</option>
@@ -166,12 +166,12 @@ export const Projects: React.FC = () => {
           </div>
 
           {/* Priority Filter */}
-          <div className="flex items-center gap-1.5 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-2xl px-3 py-2">
-            <span className="text-[11px] font-semibold text-slate-400">Priority:</span>
+          <div className="flex items-center gap-1.5 bg-[#F0F2F5]/70 dark:bg-[#182229]/60 border border-[#E9EDEF] dark:border-[#2A3942] rounded-2xl px-3 py-2">
+            <span className="text-[11px] font-bold text-[#667781] dark:text-[#8696A0]">Priority:</span>
             <select
               value={selectedPriority}
               onChange={(e) => setSelectedPriority(e.target.value)}
-              className="text-xs font-medium bg-transparent text-slate-800 dark:text-slate-200 focus:outline-none cursor-pointer"
+              className="text-xs font-semibold bg-transparent text-[#111B21] dark:text-[#E9EDEF] focus:outline-none cursor-pointer"
             >
               <option value="All">All Priorities</option>
               <option value="Low">Low</option>
@@ -182,13 +182,13 @@ export const Projects: React.FC = () => {
           </div>
 
           {/* View Toggle */}
-          <div className="flex items-center border border-slate-200 dark:border-slate-700 rounded-2xl p-1 bg-slate-50 dark:bg-slate-800/60">
+          <div className="flex items-center border border-[#E9EDEF] dark:border-[#2A3942] rounded-2xl p-1 bg-[#F0F2F5]/70 dark:bg-[#182229]/60">
             <button
               onClick={() => setViewMode('grid')}
               className={`p-1.5 rounded-xl transition-colors ${
                 viewMode === 'grid'
-                  ? 'bg-white dark:bg-slate-700 text-indigo-600 dark:text-indigo-400 shadow-xs'
-                  : 'text-slate-400 hover:text-slate-600'
+                  ? 'bg-white dark:bg-[#202C33] text-[#00A884] dark:text-[#25D366] shadow-xs font-bold'
+                  : 'text-[#667781] dark:text-[#8696A0] hover:text-[#111B21]'
               }`}
               title="Grid View"
             >
@@ -198,8 +198,8 @@ export const Projects: React.FC = () => {
               onClick={() => setViewMode('table')}
               className={`p-1.5 rounded-xl transition-colors ${
                 viewMode === 'table'
-                  ? 'bg-white dark:bg-slate-700 text-indigo-600 dark:text-indigo-400 shadow-xs'
-                  : 'text-slate-400 hover:text-slate-600'
+                  ? 'bg-white dark:bg-[#202C33] text-[#00A884] dark:text-[#25D366] shadow-xs font-bold'
+                  : 'text-[#667781] dark:text-[#8696A0] hover:text-[#111B21]'
               }`}
               title="Table View"
             >
@@ -248,11 +248,11 @@ export const Projects: React.FC = () => {
         </div>
       ) : (
         /* Table View */
-        <div className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl overflow-hidden shadow-xs">
+        <div className="wa-card rounded-3xl overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="border-b border-slate-100 dark:border-slate-800 text-[11px] uppercase tracking-wider text-slate-400 font-semibold bg-slate-50/50 dark:bg-slate-800/40">
+                <tr className="border-b border-[#E9EDEF] dark:border-[#2A3942] text-[11px] uppercase tracking-wider text-[#667781] dark:text-[#8696A0] font-bold bg-[#F0F2F5]/70 dark:bg-[#182229]/80">
                   <th className="py-3.5 px-4">Title</th>
                   <th className="py-3.5 px-4">Status</th>
                   <th className="py-3.5 px-4">Priority</th>
@@ -262,7 +262,7 @@ export const Projects: React.FC = () => {
                   <th className="py-3.5 px-4 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60 text-xs">
+              <tbody className="divide-y divide-[#E9EDEF] dark:divide-[#2A3942] text-xs">
                 {filteredProjects.map((p) => {
                   const dateStr = new Date(p.dueDate).toLocaleDateString('en-US', {
                     month: 'short',
@@ -272,11 +272,11 @@ export const Projects: React.FC = () => {
                   return (
                     <tr
                       key={p._id}
-                      className="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-colors"
+                      className="hover:bg-[#F0F2F5]/60 dark:hover:bg-[#222E35]/60 transition-colors"
                     >
-                      <td className="py-3.5 px-4 font-bold text-slate-900 dark:text-white max-w-xs">
+                      <td className="py-3.5 px-4 font-bold text-[#111B21] dark:text-[#E9EDEF] max-w-xs">
                         <span className="truncate block">{p.title}</span>
-                        <span className="text-[11px] font-normal text-slate-400 truncate block">
+                        <span className="text-[11px] font-normal text-[#667781] dark:text-[#8696A0] truncate block">
                           {p.description}
                         </span>
                       </td>
@@ -286,29 +286,29 @@ export const Projects: React.FC = () => {
                       <td className="py-3.5 px-4">
                         <StatusBadge value={p.priority} type="priority" size="sm" />
                       </td>
-                      <td className="py-3.5 px-4 text-slate-600 dark:text-slate-400 font-medium">
+                      <td className="py-3.5 px-4 text-[#667781] dark:text-[#8696A0] font-medium">
                         {p.category || 'General'}
                       </td>
                       <td className="py-3.5 px-4">
                         <div className="flex items-center gap-2">
-                          <div className="w-16 h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                          <div className="w-16 h-1.5 bg-[#E9EDEF] dark:bg-[#2A3942] rounded-full overflow-hidden">
                             <div
-                              className="h-full bg-indigo-600 rounded-full"
+                              className="h-full bg-[#00A884] rounded-full"
                               style={{ width: `${p.progress}%` }}
                             />
                           </div>
-                          <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300">
+                          <span className="text-[11px] font-bold text-[#111B21] dark:text-[#E9EDEF]">
                             {p.progress}%
                           </span>
                         </div>
                       </td>
-                      <td className="py-3.5 px-4 text-slate-500 font-medium">{dateStr}</td>
+                      <td className="py-3.5 px-4 text-[#667781] dark:text-[#8696A0] font-medium">{dateStr}</td>
                       <td className="py-3.5 px-4 text-right">
                         {canManage() ? (
                           <div className="flex items-center justify-end gap-1.5">
                             <button
                               onClick={() => setActiveModalProject(p)}
-                              className="px-2.5 py-1 text-[11px] font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
+                              className="px-2.5 py-1 text-[11px] font-semibold text-[#111B21] dark:text-[#E9EDEF] hover:bg-[#F0F2F5] dark:hover:bg-[#2A3942] rounded-lg transition-colors"
                             >
                               Edit
                             </button>
@@ -322,7 +322,7 @@ export const Projects: React.FC = () => {
                             )}
                           </div>
                         ) : (
-                          <span className="text-[11px] text-slate-400 font-medium">Read Only</span>
+                          <span className="text-[11px] text-[#667781] dark:text-[#8696A0] font-medium">Read Only</span>
                         )}
                       </td>
                     </tr>
@@ -346,18 +346,19 @@ export const Projects: React.FC = () => {
 
       {/* Delete Confirmation Modal */}
       {projectToDelete && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-fade-in">
-          <div className="w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 p-6 text-center space-y-4">
-            <div className="w-12 h-12 rounded-2xl bg-rose-100 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 flex items-center justify-center mx-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 modal-wa-backdrop animate-fade-in">
+          <div className="w-full max-w-md bg-white dark:bg-[#202C33] rounded-3xl modal-wa-container border border-[#E9EDEF] dark:border-[#2A3942] p-6 text-center space-y-4">
+            {/* Top accent icon */}
+            <div className="w-12 h-12 rounded-2xl bg-rose-100 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 flex items-center justify-center mx-auto shadow-xs">
               <Trash2 className="w-6 h-6" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-slate-900 dark:text-white">
+              <h3 className="text-base font-extrabold text-[#111B21] dark:text-[#E9EDEF]">
                 Delete Project?
               </h3>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
+              <p className="text-xs text-[#667781] dark:text-[#8696A0] mt-1 leading-relaxed">
                 Are you sure you want to delete{' '}
-                <span className="font-semibold text-slate-800 dark:text-slate-200">
+                <span className="font-bold text-[#111B21] dark:text-[#E9EDEF]">
                   "{projectToDelete.title}"
                 </span>
                 ? This action cannot be undone.
@@ -366,13 +367,13 @@ export const Projects: React.FC = () => {
             <div className="flex justify-center gap-3 pt-2">
               <button
                 onClick={() => setProjectToDelete(null)}
-                className="px-4 py-2 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors"
+                className="wa-btn-secondary px-5 py-2.5 rounded-2xl text-xs"
               >
                 Cancel
               </button>
               <button
                 onClick={handleConfirmDelete}
-                className="px-4 py-2 text-xs font-semibold bg-rose-600 hover:bg-rose-700 text-white rounded-xl shadow-sm transition-colors"
+                className="px-5 py-2.5 text-xs font-bold bg-rose-600 hover:bg-rose-700 text-white rounded-2xl shadow-sm transition-colors"
               >
                 Yes, Delete Project
               </button>

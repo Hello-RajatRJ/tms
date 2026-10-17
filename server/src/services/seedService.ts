@@ -4,36 +4,63 @@ import { User } from '../models/User';
 
 export const seedDatabase = async (): Promise<void> => {
   // 1. Seed Users for Auth & Role Based Access Control
-  const userCount = await User.countDocuments();
-  if (userCount === 0) {
-    console.log('[Seed] Seeding default authentication users (admin, manager, member)...');
-    await User.create([
-      {
-        name: 'Alex Rivera',
-        email: 'admin@tms.io',
-        password: 'Admin@123',
-        role: 'admin',
-        title: 'Executive Admin',
-        avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
-      },
-      {
-        name: 'Morgan Vance',
-        email: 'manager@tms.io',
-        password: 'Manager@123',
-        role: 'manager',
-        title: 'Project Lead',
-        avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150',
-      },
-      {
-        name: 'Taylor Brooks',
-        email: 'member@tms.io',
-        password: 'Member@123',
-        role: 'member',
-        title: 'Software Engineer',
-        avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150',
-      },
-    ]);
-    console.log('[Seed] Default users seeded successfully.');
+  // Seed initial demo users if not present
+  const defaultUsers = [
+    {
+      name: 'Alex Rivera (Admin)',
+      email: 'admin@tms.local',
+      password: 'Admin@123456',
+      role: 'admin' as const,
+      title: 'System Administrator',
+      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
+    },
+    {
+      name: 'Morgan Vance (Manager)',
+      email: 'manager@tms.local',
+      password: 'Manager@123456',
+      role: 'manager' as const,
+      title: 'Project Lead',
+      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150',
+    },
+    {
+      name: 'Taylor Brooks (Member)',
+      email: 'member@tms.local',
+      password: 'Member@123456',
+      role: 'member' as const,
+      title: 'Software Engineer',
+      avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150',
+    },
+    {
+      name: 'Alex Rivera',
+      email: 'admin@tms.io',
+      password: 'Admin@123',
+      role: 'admin' as const,
+      title: 'Executive Admin',
+      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
+    },
+    {
+      name: 'Morgan Vance',
+      email: 'manager@tms.io',
+      password: 'Manager@123',
+      role: 'manager' as const,
+      title: 'Project Lead',
+      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150',
+    },
+    {
+      name: 'Taylor Brooks',
+      email: 'member@tms.io',
+      password: 'Member@123',
+      role: 'member' as const,
+      title: 'Software Engineer',
+      avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150',
+    },
+  ];
+
+  for (const u of defaultUsers) {
+    const exists = await User.findOne({ email: u.email.toLowerCase() });
+    if (!exists) {
+      await User.create(u);
+    }
   }
 
   const memberCount = await TeamMember.countDocuments();

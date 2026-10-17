@@ -115,40 +115,40 @@ export const TeamMembers: React.FC = () => {
           {canManage() ? (
             <button
               onClick={() => setActiveModalMember({})}
-              className="inline-flex items-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-2xl shadow-sm hover:shadow transition-all hover:scale-[1.02] shrink-0"
+              className="wa-btn-primary inline-flex items-center gap-2 px-5 py-2.5 text-xs font-bold rounded-2xl shrink-0"
             >
               <Plus className="w-4 h-4 stroke-[3]" />
               Add Member
             </button>
           ) : (
-            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 text-xs font-semibold border border-slate-200 dark:border-slate-700">
-              Role: <strong className="text-slate-800 dark:text-slate-200 capitalize">{user?.role}</strong> (View Only)
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white dark:bg-[#202C33] text-[#667781] dark:text-[#8696A0] text-xs font-semibold border border-[#E9EDEF] dark:border-[#2A3942]">
+              Role: <strong className="text-[#111B21] dark:text-[#E9EDEF] capitalize">{user?.role}</strong> (View Only)
             </span>
           )}
         </div>
       </div>
 
       {/* Search and Filters */}
-      <div className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-4 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-3">
+      <div className="wa-card rounded-3xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-3">
         <div className="relative flex-1">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+          <Search className="w-4 h-4 text-[#667781] dark:text-[#8696A0] absolute left-3.5 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             placeholder="Search by name, email, or role..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 text-xs rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/40 text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500 transition-colors"
+            className="w-full pl-9 pr-4 py-2 text-xs rounded-2xl border border-[#E9EDEF] dark:border-[#2A3942] bg-[#F0F2F5]/70 dark:bg-[#182229]/60 text-[#111B21] dark:text-[#E9EDEF] wa-input"
           />
         </div>
 
         <div className="flex items-center gap-2 flex-wrap">
           {/* Department Filter */}
-          <div className="flex items-center gap-1.5 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-2xl px-3 py-2">
-            <span className="text-[11px] font-semibold text-slate-400">Department:</span>
+          <div className="flex items-center gap-1.5 bg-[#F0F2F5]/70 dark:bg-[#182229]/60 border border-[#E9EDEF] dark:border-[#2A3942] rounded-2xl px-3 py-2">
+            <span className="text-[11px] font-bold text-[#667781] dark:text-[#8696A0]">Department:</span>
             <select
               value={selectedDepartment}
               onChange={(e) => setSelectedDepartment(e.target.value)}
-              className="text-xs font-medium bg-transparent text-slate-800 dark:text-slate-200 focus:outline-none cursor-pointer"
+              className="text-xs font-semibold bg-transparent text-[#111B21] dark:text-[#E9EDEF] focus:outline-none cursor-pointer"
             >
               <option value="All">All Departments</option>
               {departments.map((d) => (
@@ -160,12 +160,12 @@ export const TeamMembers: React.FC = () => {
           </div>
 
           {/* Status Filter */}
-          <div className="flex items-center gap-1.5 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-2xl px-3 py-2">
-            <span className="text-[11px] font-semibold text-slate-400">Status:</span>
+          <div className="flex items-center gap-1.5 bg-[#F0F2F5]/70 dark:bg-[#182229]/60 border border-[#E9EDEF] dark:border-[#2A3942] rounded-2xl px-3 py-2">
+            <span className="text-[11px] font-bold text-[#667781] dark:text-[#8696A0]">Status:</span>
             <select
               value={selectedStatus}
               onChange={(e) => setSelectedStatus(e.target.value)}
-              className="text-xs font-medium bg-transparent text-slate-800 dark:text-slate-200 focus:outline-none cursor-pointer"
+              className="text-xs font-semibold bg-transparent text-[#111B21] dark:text-[#E9EDEF] focus:outline-none cursor-pointer"
             >
               <option value="All">All Statuses</option>
               <option value="Active">Active</option>
@@ -193,14 +193,14 @@ export const TeamMembers: React.FC = () => {
           {filteredMembers.map((member) => (
             <div
               key={member._id}
-              className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-5 shadow-xs hover:shadow-md transition-all flex flex-col justify-between"
+              className="wa-card rounded-3xl p-5 flex flex-col justify-between"
             >
               <div>
                 {/* Header with Avatar and Actions */}
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-600 to-purple-600 p-0.5 shadow-xs">
-                      <div className="w-full h-full rounded-[14px] bg-white dark:bg-slate-900 overflow-hidden flex items-center justify-center font-bold text-base text-indigo-600 dark:text-indigo-400">
+                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#075E54] via-[#00A884] to-[#25D366] p-0.5 shadow-xs">
+                      <div className="w-full h-full rounded-[14px] bg-white dark:bg-[#202C33] overflow-hidden flex items-center justify-center font-extrabold text-base text-[#00A884] dark:text-[#25D366]">
                         {member.avatar ? (
                           <img
                             src={member.avatar}
@@ -216,10 +216,10 @@ export const TeamMembers: React.FC = () => {
                       </div>
                     </div>
                     <div>
-                      <h3 className="text-sm font-bold text-slate-900 dark:text-white leading-tight">
+                      <h3 className="text-sm font-extrabold text-[#111B21] dark:text-[#E9EDEF] leading-tight">
                         {member.name}
                       </h3>
-                      <p className="text-xs text-indigo-600 dark:text-indigo-400 font-medium mt-0.5">
+                      <p className="text-xs text-[#00A884] dark:text-[#25D366] font-semibold mt-0.5">
                         {member.role}
                       </p>
                     </div>
@@ -229,7 +229,7 @@ export const TeamMembers: React.FC = () => {
                     <div className="flex items-center gap-1">
                       <button
                         onClick={() => setActiveModalMember(member)}
-                        className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                        className="p-1.5 rounded-xl text-[#667781] hover:text-[#111B21] dark:hover:text-[#E9EDEF] hover:bg-[#F0F2F5] dark:hover:bg-[#2A3942] transition-colors"
                         title="Edit Member"
                       >
                         <Edit2 className="w-3.5 h-3.5" />
@@ -237,7 +237,7 @@ export const TeamMembers: React.FC = () => {
                       {isAdmin() && (
                         <button
                           onClick={() => setMemberToDelete(member)}
-                          className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors"
+                          className="p-1.5 rounded-xl text-[#667781] hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors"
                           title="Delete Member"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
@@ -248,30 +248,30 @@ export const TeamMembers: React.FC = () => {
                 </div>
 
                 {/* Details List */}
-                <div className="space-y-2 text-xs text-slate-500 dark:text-slate-400 mb-4">
+                <div className="space-y-2 text-xs text-[#667781] dark:text-[#8696A0] mb-4">
                   <div className="flex items-center gap-2">
-                    <Mail className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                    <Mail className="w-3.5 h-3.5 text-[#00A884] shrink-0" />
                     <span className="truncate">{member.email}</span>
                   </div>
                   {member.phone && (
                     <div className="flex items-center gap-2">
-                      <Phone className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                      <Phone className="w-3.5 h-3.5 text-[#00A884] shrink-0" />
                       <span>{member.phone}</span>
                     </div>
                   )}
                   <div className="flex items-center gap-2">
-                    <Briefcase className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                    <Briefcase className="w-3.5 h-3.5 text-[#00A884] shrink-0" />
                     <span>{member.department || 'Engineering'}</span>
                   </div>
                 </div>
 
                 {/* Skills tags */}
                 {member.skills && member.skills.length > 0 && (
-                  <div className="flex flex-wrap gap-1 mb-4">
+                  <div className="flex flex-wrap gap-1.5 mb-4">
                     {member.skills.map((skill, idx) => (
                       <span
                         key={idx}
-                        className="text-[10px] font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-2 py-0.5 rounded-md"
+                        className="text-[10px] font-bold bg-[#F0F2F5] dark:bg-[#202C33] text-[#667781] dark:text-[#8696A0] px-2 py-0.5 rounded-lg border border-[#E9EDEF] dark:border-[#2A3942]"
                       >
                         {skill}
                       </span>
@@ -281,10 +281,10 @@ export const TeamMembers: React.FC = () => {
               </div>
 
               {/* Card Footer: Status & Project Count */}
-              <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+              <div className="pt-3 border-t border-[#E9EDEF] dark:border-[#2A3942] flex items-center justify-between">
                 <StatusBadge value={member.status || 'Active'} type="status" size="sm" />
-                <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-600 dark:text-slate-400">
-                  <FolderKanban className="w-3.5 h-3.5 text-indigo-500" />
+                <div className="flex items-center gap-1.5 text-xs font-bold text-[#111B21] dark:text-[#E9EDEF]">
+                  <FolderKanban className="w-3.5 h-3.5 text-[#00A884]" />
                   <span>{member.projectCount || 0} Projects</span>
                 </div>
               </div>
@@ -305,18 +305,18 @@ export const TeamMembers: React.FC = () => {
 
       {/* Delete Member Confirmation Modal */}
       {memberToDelete && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-fade-in">
-          <div className="w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 p-6 text-center space-y-4">
-            <div className="w-12 h-12 rounded-2xl bg-rose-100 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 flex items-center justify-center mx-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 modal-wa-backdrop animate-fade-in">
+          <div className="w-full max-w-md bg-white dark:bg-[#202C33] rounded-3xl modal-wa-container border border-[#E9EDEF] dark:border-[#2A3942] p-6 text-center space-y-4">
+            <div className="w-12 h-12 rounded-2xl bg-rose-100 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 flex items-center justify-center mx-auto shadow-xs">
               <Trash2 className="w-6 h-6" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-slate-900 dark:text-white">
+              <h3 className="text-base font-extrabold text-[#111B21] dark:text-[#E9EDEF]">
                 Remove Team Member?
               </h3>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
+              <p className="text-xs text-[#667781] dark:text-[#8696A0] mt-1 leading-relaxed">
                 Are you sure you want to remove{' '}
-                <span className="font-semibold text-slate-800 dark:text-slate-200">
+                <span className="font-bold text-[#111B21] dark:text-[#E9EDEF]">
                   "{memberToDelete.name}"
                 </span>
                 ? They will be unassigned from all associated projects.
@@ -325,13 +325,13 @@ export const TeamMembers: React.FC = () => {
             <div className="flex justify-center gap-3 pt-2">
               <button
                 onClick={() => setMemberToDelete(null)}
-                className="px-4 py-2 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors"
+                className="wa-btn-secondary px-5 py-2.5 rounded-2xl text-xs"
               >
                 Cancel
               </button>
               <button
                 onClick={handleConfirmDelete}
-                className="px-4 py-2 text-xs font-semibold bg-rose-600 hover:bg-rose-700 text-white rounded-xl shadow-sm transition-colors"
+                className="px-5 py-2.5 text-xs font-bold bg-rose-600 hover:bg-rose-700 text-white rounded-2xl shadow-sm transition-colors"
               >
                 Yes, Remove Member
               </button>
@@ -411,21 +411,24 @@ const MemberFormModal: React.FC<{
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-fade-in">
-      <div className="relative w-full max-w-lg bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 modal-wa-backdrop animate-fade-in">
+      <div className="relative w-full max-w-lg bg-white dark:bg-[#202C33] rounded-3xl modal-wa-container border border-[#E9EDEF] dark:border-[#2A3942] overflow-hidden my-8">
+        {/* Top Emerald Accent Bar */}
+        <div className="h-1.5 w-full bg-gradient-to-r from-[#075E54] via-[#00A884] to-[#25D366]" />
+
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-[#E9EDEF] dark:border-[#2A3942] bg-[#F0F2F5]/70 dark:bg-[#182229]/80">
           <div>
-            <h2 className="text-base font-bold text-slate-900 dark:text-white">
+            <h2 className="text-base font-extrabold text-[#111B21] dark:text-[#E9EDEF]">
               {isEditing ? 'Edit Team Member' : 'Add Team Member'}
             </h2>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
+            <p className="text-xs text-[#667781] dark:text-[#8696A0]">
               {isEditing ? 'Update profile and contact information.' : 'Invite a new contributor to projects.'}
             </p>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            className="p-2 rounded-xl text-[#667781] hover:text-[#111B21] dark:hover:text-[#E9EDEF] hover:bg-[#E9EDEF]/60 dark:hover:bg-[#2A3942] transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -434,14 +437,14 @@ const MemberFormModal: React.FC<{
         {/* Form Body */}
         <form onSubmit={handleSubmit} className="p-6 space-y-4 max-h-[75vh] overflow-y-auto">
           {errors.form && (
-            <div className="p-3 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 rounded-xl text-xs text-rose-700 dark:text-rose-400">
+            <div className="p-3 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900 rounded-2xl text-xs text-rose-700 dark:text-rose-400">
               {errors.form}
             </div>
           )}
 
           {/* Name */}
           <div>
-            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+            <label className="block text-xs font-bold text-[#111B21] dark:text-[#E9EDEF] mb-1.5">
               Full Name <span className="text-rose-500">*</span>
             </label>
             <input
@@ -450,8 +453,8 @@ const MemberFormModal: React.FC<{
               value={formData.name}
               onChange={handleChange}
               placeholder="e.g. Alex Morgan"
-              className={`w-full px-3.5 py-2 text-sm rounded-xl border bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500 ${
-                errors.name ? 'border-rose-400' : 'border-slate-200 dark:border-slate-700'
+              className={`w-full px-3.5 py-2.5 text-sm rounded-2xl border bg-white dark:bg-[#222E35] text-[#111B21] dark:text-[#E9EDEF] wa-input ${
+                errors.name ? 'border-rose-400' : 'border-[#E9EDEF] dark:border-[#2A3942]'
               }`}
             />
             {errors.name && <p className="text-[11px] text-rose-500 mt-1">{errors.name}</p>}
@@ -459,7 +462,7 @@ const MemberFormModal: React.FC<{
 
           {/* Email */}
           <div>
-            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+            <label className="block text-xs font-bold text-[#111B21] dark:text-[#E9EDEF] mb-1.5">
               Work Email <span className="text-rose-500">*</span>
             </label>
             <input
@@ -468,8 +471,8 @@ const MemberFormModal: React.FC<{
               value={formData.email}
               onChange={handleChange}
               placeholder="alex.morgan@company.com"
-              className={`w-full px-3.5 py-2 text-sm rounded-xl border bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500 ${
-                errors.email ? 'border-rose-400' : 'border-slate-200 dark:border-slate-700'
+              className={`w-full px-3.5 py-2.5 text-sm rounded-2xl border bg-white dark:bg-[#222E35] text-[#111B21] dark:text-[#E9EDEF] wa-input ${
+                errors.email ? 'border-rose-400' : 'border-[#E9EDEF] dark:border-[#2A3942]'
               }`}
             />
             {errors.email && <p className="text-[11px] text-rose-500 mt-1">{errors.email}</p>}
@@ -478,7 +481,7 @@ const MemberFormModal: React.FC<{
           {/* Role & Department */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+              <label className="block text-xs font-bold text-[#111B21] dark:text-[#E9EDEF] mb-1.5">
                 Role / Title <span className="text-rose-500">*</span>
               </label>
               <input
@@ -487,19 +490,19 @@ const MemberFormModal: React.FC<{
                 value={formData.role}
                 onChange={handleChange}
                 placeholder="Senior React Engineer"
-                className="w-full px-3.5 py-2 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500"
+                className="w-full px-3.5 py-2.5 text-sm rounded-2xl border border-[#E9EDEF] dark:border-[#2A3942] bg-white dark:bg-[#222E35] text-[#111B21] dark:text-[#E9EDEF] wa-input"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+              <label className="block text-xs font-bold text-[#111B21] dark:text-[#E9EDEF] mb-1.5">
                 Department
               </label>
               <select
                 name="department"
                 value={formData.department}
                 onChange={handleChange}
-                className="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500"
+                className="w-full px-3.5 py-2.5 text-sm rounded-2xl border border-[#E9EDEF] dark:border-[#2A3942] bg-white dark:bg-[#222E35] text-[#111B21] dark:text-[#E9EDEF] wa-input cursor-pointer"
               >
                 {departments.map((dept) => (
                   <option key={dept} value={dept}>
@@ -513,7 +516,7 @@ const MemberFormModal: React.FC<{
           {/* Phone & Status */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+              <label className="block text-xs font-bold text-[#111B21] dark:text-[#E9EDEF] mb-1.5">
                 Phone Number
               </label>
               <input
@@ -522,19 +525,19 @@ const MemberFormModal: React.FC<{
                 value={formData.phone}
                 onChange={handleChange}
                 placeholder="+1 555-0145"
-                className="w-full px-3.5 py-2 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500"
+                className="w-full px-3.5 py-2.5 text-sm rounded-2xl border border-[#E9EDEF] dark:border-[#2A3942] bg-white dark:bg-[#222E35] text-[#111B21] dark:text-[#E9EDEF] wa-input"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+              <label className="block text-xs font-bold text-[#111B21] dark:text-[#E9EDEF] mb-1.5">
                 Status
               </label>
               <select
                 name="status"
                 value={formData.status}
                 onChange={handleChange}
-                className="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500"
+                className="w-full px-3.5 py-2.5 text-sm rounded-2xl border border-[#E9EDEF] dark:border-[#2A3942] bg-white dark:bg-[#222E35] text-[#111B21] dark:text-[#E9EDEF] wa-input cursor-pointer"
               >
                 <option value="Active">Active</option>
                 <option value="Inactive">Inactive</option>
@@ -545,7 +548,7 @@ const MemberFormModal: React.FC<{
 
           {/* Avatar URL */}
           <div>
-            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+            <label className="block text-xs font-bold text-[#111B21] dark:text-[#E9EDEF] mb-1.5">
               Avatar Image URL (optional)
             </label>
             <input
@@ -554,13 +557,13 @@ const MemberFormModal: React.FC<{
               value={formData.avatar}
               onChange={handleChange}
               placeholder="https://images.unsplash.com/..."
-              className="w-full px-3.5 py-2 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500"
+              className="w-full px-3.5 py-2.5 text-sm rounded-2xl border border-[#E9EDEF] dark:border-[#2A3942] bg-white dark:bg-[#222E35] text-[#111B21] dark:text-[#E9EDEF] wa-input"
             />
           </div>
 
           {/* Skills (comma-separated) */}
           <div>
-            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+            <label className="block text-xs font-bold text-[#111B21] dark:text-[#E9EDEF] mb-1.5">
               Skills (comma-separated)
             </label>
             <input
@@ -569,24 +572,24 @@ const MemberFormModal: React.FC<{
               value={formData.skills}
               onChange={handleChange}
               placeholder="React, Node.js, GraphQL, Docker"
-              className="w-full px-3.5 py-2 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500"
+              className="w-full px-3.5 py-2.5 text-sm rounded-2xl border border-[#E9EDEF] dark:border-[#2A3942] bg-white dark:bg-[#222E35] text-[#111B21] dark:text-[#E9EDEF] wa-input"
             />
           </div>
 
           {/* Footer Buttons */}
-          <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex justify-end gap-2.5">
+          <div className="pt-4 border-t border-[#E9EDEF] dark:border-[#2A3942] flex justify-end gap-3">
             <button
               type="button"
               onClick={onClose}
               disabled={submitting}
-              className="px-4 py-2 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors"
+              className="wa-btn-secondary px-5 py-2.5 rounded-2xl text-xs"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={submitting}
-              className="inline-flex items-center gap-2 px-5 py-2 text-xs font-semibold bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl shadow-sm hover:shadow transition-all disabled:opacity-50"
+              className="wa-btn-primary inline-flex items-center gap-2 px-6 py-2.5 rounded-2xl text-xs disabled:opacity-50"
             >
               {submitting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
               <span>{isEditing ? 'Save Changes' : 'Add Member'}</span>

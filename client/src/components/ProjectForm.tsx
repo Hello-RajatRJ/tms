@@ -147,15 +147,18 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs overflow-y-auto">
-      <div className="relative w-full max-w-2xl bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden my-8 animate-fade-in">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 modal-wa-backdrop overflow-y-auto">
+      <div className="relative w-full max-w-2xl bg-white dark:bg-[#202C33] rounded-3xl modal-wa-container border border-[#E9EDEF] dark:border-[#2A3942] overflow-hidden my-8 animate-fade-in">
+        {/* Top Emerald Accent Bar */}
+        <div className="h-1.5 w-full bg-gradient-to-r from-[#075E54] via-[#00A884] to-[#25D366]" />
+
         {/* Modal Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-[#E9EDEF] dark:border-[#2A3942] bg-[#F0F2F5]/70 dark:bg-[#182229]/80">
           <div>
-            <h2 className="text-lg font-bold text-slate-900 dark:text-white">
+            <h2 className="text-lg font-extrabold text-[#111B21] dark:text-[#E9EDEF] tracking-tight">
               {isEditing ? 'Edit Project' : 'Create New Project'}
             </h2>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
+            <p className="text-xs text-[#667781] dark:text-[#8696A0]">
               {isEditing
                 ? 'Update project details, assignees, and timeline.'
                 : 'Fill in the information to launch a new project.'}
@@ -163,7 +166,7 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            className="p-2 rounded-xl text-[#667781] hover:text-[#111B21] dark:hover:text-[#E9EDEF] hover:bg-[#E9EDEF]/60 dark:hover:bg-[#2A3942] transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -172,14 +175,14 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
         {/* Form Body */}
         <form onSubmit={handleSubmit} className="p-6 space-y-4 max-h-[75vh] overflow-y-auto">
           {errors.form && (
-            <div className="p-3 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 rounded-xl text-xs text-rose-700 dark:text-rose-400">
+            <div className="p-3 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900 rounded-2xl text-xs text-rose-700 dark:text-rose-400">
               {errors.form}
             </div>
           )}
 
           {/* Title */}
           <div>
-            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+            <label className="block text-xs font-bold text-[#111B21] dark:text-[#E9EDEF] mb-1.5">
               Project Title <span className="text-rose-500">*</span>
             </label>
             <input
@@ -188,17 +191,18 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
               value={formData.title}
               onChange={handleChange}
               placeholder="e.g. Enterprise Payment Gateway Migration"
-              className={`w-full px-3.5 py-2 text-sm rounded-xl border bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all ${errors.title
+              className={`w-full px-3.5 py-2.5 text-sm rounded-2xl border bg-white dark:bg-[#222E35] text-[#111B21] dark:text-[#E9EDEF] wa-input transition-all ${
+                errors.title
                   ? 'border-rose-400 focus:border-rose-500'
-                  : 'border-slate-200 dark:border-slate-700 focus:border-indigo-500'
-                }`}
+                  : 'border-[#E9EDEF] dark:border-[#2A3942]'
+              }`}
             />
             {errors.title && <p className="text-[11px] text-rose-500 mt-1">{errors.title}</p>}
           </div>
 
           {/* Description */}
           <div>
-            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+            <label className="block text-xs font-bold text-[#111B21] dark:text-[#E9EDEF] mb-1.5">
               Description <span className="text-rose-500">*</span>
             </label>
             <textarea
@@ -207,10 +211,11 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
               value={formData.description}
               onChange={handleChange}
               placeholder="Outline project objectives, key deliverables, and requirements..."
-              className={`w-full px-3.5 py-2 text-sm rounded-xl border bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all ${errors.description
+              className={`w-full px-3.5 py-2.5 text-sm rounded-2xl border bg-white dark:bg-[#222E35] text-[#111B21] dark:text-[#E9EDEF] wa-input transition-all ${
+                errors.description
                   ? 'border-rose-400 focus:border-rose-500'
-                  : 'border-slate-200 dark:border-slate-700 focus:border-indigo-500'
-                }`}
+                  : 'border-[#E9EDEF] dark:border-[#2A3942]'
+              }`}
             />
             {errors.description && (
               <p className="text-[11px] text-rose-500 mt-1">{errors.description}</p>
@@ -220,14 +225,14 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
           {/* Status, Priority, Category (3 Columns) */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div>
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+              <label className="block text-xs font-bold text-[#111B21] dark:text-[#E9EDEF] mb-1.5">
                 Status
               </label>
               <select
                 name="status"
                 value={formData.status}
                 onChange={handleChange}
-                className="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500"
+                className="w-full px-3.5 py-2.5 text-sm rounded-2xl border border-[#E9EDEF] dark:border-[#2A3942] bg-white dark:bg-[#222E35] text-[#111B21] dark:text-[#E9EDEF] wa-input cursor-pointer"
               >
                 <option value="Planning">Planning</option>
                 <option value="In Progress">In Progress</option>
@@ -237,14 +242,14 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+              <label className="block text-xs font-bold text-[#111B21] dark:text-[#E9EDEF] mb-1.5">
                 Priority
               </label>
               <select
                 name="priority"
                 value={formData.priority}
                 onChange={handleChange}
-                className="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500"
+                className="w-full px-3.5 py-2.5 text-sm rounded-2xl border border-[#E9EDEF] dark:border-[#2A3942] bg-white dark:bg-[#222E35] text-[#111B21] dark:text-[#E9EDEF] wa-input cursor-pointer"
               >
                 <option value="Low">Low</option>
                 <option value="Medium">Medium</option>
@@ -254,14 +259,14 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+              <label className="block text-xs font-bold text-[#111B21] dark:text-[#E9EDEF] mb-1.5">
                 Category
               </label>
               <select
                 name="category"
                 value={formData.category}
                 onChange={handleChange}
-                className="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500"
+                className="w-full px-3.5 py-2.5 text-sm rounded-2xl border border-[#E9EDEF] dark:border-[#2A3942] bg-white dark:bg-[#222E35] text-[#111B21] dark:text-[#E9EDEF] wa-input cursor-pointer"
               >
                 <option value="Development">Development</option>
                 <option value="UI/UX Design">UI/UX Design</option>
@@ -276,7 +281,7 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
           {/* Due Date & Progress Slider */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+              <label className="block text-xs font-bold text-[#111B21] dark:text-[#E9EDEF] mb-1.5">
                 Due Date <span className="text-rose-500">*</span>
               </label>
               <input
@@ -284,18 +289,19 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
                 name="dueDate"
                 value={formData.dueDate}
                 onChange={handleChange}
-                className={`w-full px-3.5 py-2 text-sm rounded-xl border bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500 ${errors.dueDate ? 'border-rose-400' : 'border-slate-200 dark:border-slate-700'
-                  }`}
+                className={`w-full px-3.5 py-2.5 text-sm rounded-2xl border bg-white dark:bg-[#222E35] text-[#111B21] dark:text-[#E9EDEF] wa-input ${
+                  errors.dueDate ? 'border-rose-400' : 'border-[#E9EDEF] dark:border-[#2A3942]'
+                }`}
               />
               {errors.dueDate && <p className="text-[11px] text-rose-500 mt-1">{errors.dueDate}</p>}
             </div>
 
             <div>
-              <div className="flex justify-between items-center mb-1">
-                <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+              <div className="flex justify-between items-center mb-1.5">
+                <label className="text-xs font-bold text-[#111B21] dark:text-[#E9EDEF]">
                   Progress Percentage
                 </label>
-                <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400">
+                <span className="text-xs font-extrabold text-[#00A884] dark:text-[#25D366]">
                   {formData.progress}%
                 </span>
               </div>
@@ -307,7 +313,7 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
                 step="5"
                 value={formData.progress}
                 onChange={handleChange}
-                className="w-full accent-indigo-600 cursor-pointer h-2 bg-slate-200 dark:bg-slate-700 rounded-lg"
+                className="w-full accent-[#00A884] cursor-pointer h-2 bg-[#E9EDEF] dark:bg-[#2A3942] rounded-lg"
               />
             </div>
           </div>
@@ -315,7 +321,7 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
           {/* Budget & Spent */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+              <label className="block text-xs font-bold text-[#111B21] dark:text-[#E9EDEF] mb-1.5">
                 Budget ($)
               </label>
               <input
@@ -325,12 +331,12 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
                 value={formData.budget}
                 onChange={handleChange}
                 placeholder="0"
-                className="w-full px-3.5 py-2 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500"
+                className="w-full px-3.5 py-2.5 text-sm rounded-2xl border border-[#E9EDEF] dark:border-[#2A3942] bg-white dark:bg-[#222E35] text-[#111B21] dark:text-[#E9EDEF] wa-input"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+              <label className="block text-xs font-bold text-[#111B21] dark:text-[#E9EDEF] mb-1.5">
                 Spent ($)
               </label>
               <input
@@ -340,14 +346,14 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
                 value={formData.spent}
                 onChange={handleChange}
                 placeholder="0"
-                className="w-full px-3.5 py-2 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500"
+                className="w-full px-3.5 py-2.5 text-sm rounded-2xl border border-[#E9EDEF] dark:border-[#2A3942] bg-white dark:bg-[#222E35] text-[#111B21] dark:text-[#E9EDEF] wa-input"
               />
             </div>
           </div>
 
           {/* Tags */}
           <div>
-            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+            <label className="block text-xs font-bold text-[#111B21] dark:text-[#E9EDEF] mb-1.5">
               Tags (comma-separated)
             </label>
             <input
@@ -356,19 +362,21 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
               value={formData.tags}
               onChange={handleChange}
               placeholder="React, AWS, Security, UI"
-              className="w-full px-3.5 py-2 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500"
+              className="w-full px-3.5 py-2.5 text-sm rounded-2xl border border-[#E9EDEF] dark:border-[#2A3942] bg-white dark:bg-[#222E35] text-[#111B21] dark:text-[#E9EDEF] wa-input"
             />
           </div>
 
           {/* Assign Team Members Multi-select */}
           <div>
-            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-2">
+            <label className="block text-xs font-bold text-[#111B21] dark:text-[#E9EDEF] mb-2">
               Assign Team Members ({formData.teamMembers.length} selected)
             </label>
             {allMembers.length === 0 ? (
-              <p className="text-xs text-slate-400 italic">No team members available. Add them in Team Members page.</p>
+              <p className="text-xs text-[#667781] dark:text-[#8696A0] italic">
+                No team members available. Add them in Team Members page.
+              </p>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-40 overflow-y-auto p-1">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-44 overflow-y-auto p-1">
                 {allMembers.map((member) => {
                   const isSelected = formData.teamMembers.includes(member._id);
                   return (
@@ -376,27 +384,29 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
                       key={member._id}
                       type="button"
                       onClick={() => handleMemberToggle(member._id)}
-                      className={`flex items-center justify-between p-2 rounded-xl border text-left transition-all ${isSelected
-                          ? 'border-indigo-500 bg-indigo-50/70 dark:bg-indigo-950/40 text-indigo-900 dark:text-indigo-200'
-                          : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300'
-                        }`}
+                      className={`flex items-center justify-between p-2.5 rounded-2xl border text-left transition-all ${
+                        isSelected
+                          ? 'border-[#00A884] bg-[#E7F8F0] dark:bg-[#075E54]/30 text-[#00A884] dark:text-[#25D366] font-semibold'
+                          : 'border-[#E9EDEF] dark:border-[#2A3942] hover:border-[#00A884]/40 bg-white dark:bg-[#222E35] text-[#111B21] dark:text-[#E9EDEF]'
+                      }`}
                     >
-                      <div className="flex items-center gap-2 min-w-0">
-                        <div className="w-6 h-6 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-[10px] font-bold text-slate-700 dark:text-slate-300 shrink-0">
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div className="w-7 h-7 rounded-full bg-[#E9EDEF] dark:bg-[#2A3942] flex items-center justify-center text-xs font-bold text-[#111B21] dark:text-[#E9EDEF] shrink-0">
                           {member.name.charAt(0)}
                         </div>
                         <div className="truncate">
-                          <p className="text-xs font-semibold truncate">{member.name}</p>
-                          <p className="text-[10px] text-slate-400 truncate">{member.role}</p>
+                          <p className="text-xs font-bold truncate">{member.name}</p>
+                          <p className="text-[10px] text-[#667781] dark:text-[#8696A0] truncate">{member.role}</p>
                         </div>
                       </div>
                       <div
-                        className={`w-4 h-4 rounded flex items-center justify-center shrink-0 ml-2 ${isSelected
-                            ? 'bg-indigo-600 text-white'
-                            : 'border border-slate-300 dark:border-slate-600'
-                          }`}
+                        className={`w-5 h-5 rounded-md flex items-center justify-center shrink-0 ml-2 transition-colors ${
+                          isSelected
+                            ? 'bg-[#00A884] text-white shadow-xs'
+                            : 'border border-[#CBD5E1] dark:border-[#2A3942]'
+                        }`}
                       >
-                        {isSelected && <Check className="w-3 h-3 stroke-[3]" />}
+                        {isSelected && <Check className="w-3.5 h-3.5 stroke-[3]" />}
                       </div>
                     </button>
                   );
@@ -406,19 +416,19 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
           </div>
 
           {/* Modal Footer Buttons */}
-          <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex justify-end gap-2.5">
+          <div className="pt-4 border-t border-[#E9EDEF] dark:border-[#2A3942] flex justify-end gap-3">
             <button
               type="button"
               onClick={onClose}
               disabled={submitting}
-              className="px-4 py-2 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors"
+              className="wa-btn-secondary px-5 py-2.5 rounded-2xl text-xs"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={submitting}
-              className="inline-flex items-center gap-2 px-5 py-2 text-xs font-semibold bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl shadow-sm hover:shadow transition-all disabled:opacity-50"
+              className="wa-btn-primary inline-flex items-center gap-2 px-6 py-2.5 rounded-2xl text-xs disabled:opacity-50"
             >
               {submitting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
               <span>{isEditing ? 'Save Changes' : 'Create Project'}</span>

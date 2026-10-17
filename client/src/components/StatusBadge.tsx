@@ -39,8 +39,8 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
           };
         case 'medium':
           return {
-            bg: 'bg-sky-500/10 text-sky-600 dark:text-sky-400 border-sky-500/20',
-            dot: 'bg-sky-500',
+            bg: 'bg-[#E7F8F0] text-[#00A884] dark:bg-[#075E54]/30 dark:text-[#25D366] border-[#00A884]/30',
+            dot: 'bg-[#00A884]',
           };
         case 'low':
         default:
@@ -56,13 +56,13 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
       case 'completed':
       case 'active':
         return {
-          bg: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
-          dot: 'bg-emerald-500',
+          bg: 'bg-[#E7F8F0] text-[#00A884] dark:bg-[#075E54]/40 dark:text-[#25D366] border-[#00A884]/30',
+          dot: 'bg-[#25D366]',
         };
       case 'in progress':
         return {
-          bg: 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-500/20',
-          dot: 'bg-indigo-500',
+          bg: 'bg-[#E7F8F0] text-[#128C7E] dark:bg-[#128C7E]/30 dark:text-[#25D366] border-[#128C7E]/30',
+          dot: 'bg-[#00A884]',
         };
       case 'planning':
       case 'on leave':
@@ -73,8 +73,8 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
       case 'on hold':
       case 'inactive':
         return {
-          bg: 'bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20',
-          dot: 'bg-purple-500',
+          bg: 'bg-slate-500/10 text-slate-600 dark:text-slate-400 border-slate-500/20',
+          dot: 'bg-slate-400',
         };
       default:
         return {
