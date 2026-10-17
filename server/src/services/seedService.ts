@@ -2,41 +2,24 @@ import { TeamMember } from '../models/TeamMember';
 import { Project } from '../models/Project';
 import { User } from '../models/User';
 
-export const seedDatabase = async (): Promise<void> => {
+export const seedDatabase = async (force: boolean = false): Promise<void> => {
   // 1. Seed Users for Auth & Role Based Access Control
-  // Seed initial demo users if not present
   const defaultUsers = [
-    {
-      name: 'Alex Rivera (Admin)',
-      email: 'admin@tms.local',
-      password: 'Admin@123456',
-      role: 'admin' as const,
-      title: 'System Administrator',
-      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
-    },
-    {
-      name: 'Morgan Vance (Manager)',
-      email: 'manager@tms.local',
-      password: 'Manager@123456',
-      role: 'manager' as const,
-      title: 'Project Lead',
-      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150',
-    },
-    {
-      name: 'Taylor Brooks (Member)',
-      email: 'member@tms.local',
-      password: 'Member@123456',
-      role: 'member' as const,
-      title: 'Software Engineer',
-      avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150',
-    },
     {
       name: 'Alex Rivera',
       email: 'admin@tms.io',
       password: 'Admin@123',
       role: 'admin' as const,
-      title: 'Executive Admin',
-      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
+      title: 'Admin',
+      avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150',
+    },
+    {
+      name: 'Alex Rivera (Admin)',
+      email: 'admin@tms.local',
+      password: 'Admin@123456',
+      role: 'admin' as const,
+      title: 'Admin',
+      avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150',
     },
     {
       name: 'Morgan Vance',
@@ -52,7 +35,7 @@ export const seedDatabase = async (): Promise<void> => {
       password: 'Member@123',
       role: 'member' as const,
       title: 'Software Engineer',
-      avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150',
+      avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150',
     },
   ];
 
@@ -60,145 +43,285 @@ export const seedDatabase = async (): Promise<void> => {
     const exists = await User.findOne({ email: u.email.toLowerCase() });
     if (!exists) {
       await User.create(u);
+    } else {
+      await User.updateOne({ email: u.email.toLowerCase() }, { avatar: u.avatar, title: u.title });
     }
   }
 
   const memberCount = await TeamMember.countDocuments();
-  if (memberCount > 0) {
+  if (memberCount > 0 && !force) {
     console.log('[Seed] Database already contains records. Skipping seed.');
     return;
   }
 
-  console.log('[Seed] Database is empty. Seeding initial demo data...');
+  if (force) {
+    console.log('[Seed] Force reset active. Clearing old collections...');
+    await Project.deleteMany({});
+    await TeamMember.deleteMany({});
+  }
 
+  console.log('[Seed] Seeding reference dataset (8 team members, 12 projects)...');
+
+  // Seed 8 Team Members matching mockup
   const members = await TeamMember.create([
     {
-      name: 'Alice Johnson',
-      email: 'alice.johnson@techcorp.io',
+      name: 'Maya Chen',
+      email: 'maya.chen@tms.io',
       role: 'Frontend Developer',
       department: 'Engineering',
       phone: '+1 (555) 234-5678',
       status: 'Active',
-      skills: ['React', 'TypeScript', 'Tailwind CSS', 'Next.js'],
+      skills: ['Frontend Architecture', 'UI Engineering', 'Design Systems', 'Performance'],
       avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150',
     },
     {
-      name: 'Bob Smith',
-      email: 'bob.smith@techcorp.io',
+      name: 'Noah Patel',
+      email: 'noah.patel@tms.io',
       role: 'Backend Developer',
       department: 'Engineering',
       phone: '+1 (555) 345-6789',
       status: 'Active',
-      skills: ['Node.js', 'Express', 'MongoDB', 'Docker', 'GraphQL'],
+      skills: ['API Architecture', 'Database Systems', 'Cloud Services', 'Security'],
       avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150',
     },
     {
-      name: 'Clara Zhang',
-      email: 'clara.zhang@techcorp.io',
+      name: 'Olivia Reed',
+      email: 'olivia.reed@tms.io',
       role: 'UI/UX Designer',
       department: 'Product Design',
       phone: '+1 (555) 456-7890',
       status: 'Active',
-      skills: ['Figma', 'Design Systems', 'User Research', 'Prototyping'],
+      skills: ['Design Systems', 'User Research', 'Prototyping', 'Visual Polish'],
       avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
     },
     {
       name: 'David Miller',
-      email: 'david.miller@techcorp.io',
+      email: 'david.miller@tms.io',
       role: 'DevOps Engineer',
       department: 'Infrastructure',
       phone: '+1 (555) 567-8901',
       status: 'Active',
-      skills: ['Kubernetes', 'AWS', 'Terraform', 'CI/CD', 'GitHub Actions'],
+      skills: ['Cloud Platforms', 'Containerization', 'Automation', 'DevOps'],
       avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150',
     },
     {
-      name: 'Elena Rostova',
-      email: 'elena.rostova@techcorp.io',
+      name: 'Alice Johnson',
+      email: 'alice.johnson@tms.io',
       role: 'QA Engineer',
       department: 'Quality Assurance',
       phone: '+1 (555) 678-9012',
       status: 'Active',
-      skills: ['Cypress', 'Playwright', 'Jest', 'API Testing', 'Performance'],
+      skills: ['Automated Testing', 'Quality Assurance', 'End-to-End', 'Performance'],
       avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150',
+    },
+    {
+      name: 'Liam Scott',
+      email: 'liam.scott@tms.io',
+      role: 'Full Stack Engineer',
+      department: 'Engineering',
+      phone: '+1 (555) 789-0123',
+      status: 'Active',
+      skills: ['Full Stack Development', 'Microservices', 'GraphQL', 'APIs'],
+      avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150',
+    },
+    {
+      name: 'Sophia Zhang',
+      email: 'sophia.zhang@tms.io',
+      role: 'Product Manager',
+      department: 'Product',
+      phone: '+1 (555) 890-1234',
+      status: 'Active',
+      skills: ['Product Strategy', 'Agile Delivery', 'Roadmapping', 'Analytics'],
+      avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150',
+    },
+    {
+      name: 'Lucas Gray',
+      email: 'lucas.gray@tms.io',
+      role: 'Mobile Engineer',
+      department: 'Mobile',
+      phone: '+1 (555) 901-2345',
+      status: 'Active',
+      skills: ['iOS Architecture', 'Android', 'Mobile Performance', 'Offline Sync'],
+      avatar: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=150',
     },
   ]);
 
-  const now = new Date();
-  const addDays = (days: number) => new Date(now.getTime() + days * 24 * 60 * 60 * 1000);
-
+  // Seed 12 Projects: Exactly 4 Completed, 6 In Progress, 2 Planning (Pending)
+  // Average Progress: (70+100+30+65+35+100+80+55+100+100+45+36) / 12 = 816 / 12 = 68%
   await Project.create([
+    // Row 1 in Recent Projects: Website Redesign
     {
-      title: 'Cloud Infrastructure Modernization',
-      description: 'Migrate legacy microservices to Kubernetes on AWS EKS with automated zero-downtime CI/CD pipelines.',
+      title: 'Website Redesign',
+      description: 'Redesign the company website with modern UI/UX',
       status: 'In Progress',
       priority: 'High',
-      startDate: addDays(-20),
-      dueDate: addDays(40),
-      budget: 45000,
-      spent: 28000,
-      progress: 65,
-      category: 'DevOps & Cloud',
-      tags: ['AWS', 'Kubernetes', 'CI/CD', 'Docker'],
-      teamMembers: [members[1]._id, members[3]._id],
-    },
-    {
-      title: 'Mobile App Redesign 2.0',
-      description: 'Complete overhaul of user interface and checkout experience for the iOS and Android flagship applications.',
-      status: 'Planning',
-      priority: 'Medium',
-      startDate: addDays(-5),
-      dueDate: addDays(60),
+      startDate: new Date('2025-01-10'),
+      dueDate: new Date('2025-04-25'),
       budget: 35000,
-      spent: 4200,
-      progress: 20,
-      category: 'Mobile & Design',
-      tags: ['Figma', 'React Native', 'UI/UX', 'Mobile'],
-      teamMembers: [members[0]._id, members[2]._id],
+      spent: 24500,
+      progress: 70,
+      category: 'Web Development',
+      tags: ['Design System', 'Frontend', 'Performance'],
+      teamMembers: [members[0]._id],
     },
+    // Row 2 in Recent Projects: CRM Integration
     {
-      title: 'Global Payment Gateway Integration',
-      description: 'Integrate Stripe and PayPal checkout flows supporting multi-currency payments, 3D Secure, and fraud detection.',
+      title: 'CRM Integration',
+      description: 'Integrate CRM with existing platform',
       status: 'Completed',
       priority: 'Urgent',
-      startDate: addDays(-45),
-      dueDate: addDays(-2),
-      budget: 25000,
-      spent: 23500,
+      startDate: new Date('2025-01-05'),
+      dueDate: new Date('2025-04-18'),
+      budget: 28000,
+      spent: 27500,
       progress: 100,
-      category: 'Fintech',
-      tags: ['Stripe', 'Node.js', 'Security', 'Payments'],
-      teamMembers: [members[1]._id, members[4]._id],
+      category: 'Backend Services',
+      tags: ['CRM', 'APIs', 'Sync', 'Integrations'],
+      teamMembers: [members[1]._id],
     },
+    // Row 3 in Recent Projects: Mobile App
     {
-      title: 'Real-Time Customer Analytics Dashboard',
-      description: 'Build high-performance real-time analytics dashboard with interactive charts, event streaming, and exportable reports.',
+      title: 'Mobile App',
+      description: 'Build cross-platform mobile application',
+      status: 'Planning',
+      priority: 'Medium',
+      startDate: new Date('2025-02-15'),
+      dueDate: new Date('2025-05-10'),
+      budget: 45000,
+      spent: 13500,
+      progress: 30,
+      category: 'Mobile & Design',
+      tags: ['Mobile', 'iOS', 'Android', 'Design'],
+      teamMembers: [members[2]._id],
+    },
+    // Remaining Projects for telemetry metrics (12 total, 4 completed, 6 in progress, 2 planning)
+    {
+      title: 'Cloud Infrastructure Modernization',
+      description: 'Migrate legacy microservices to Kubernetes on AWS EKS with automated CI/CD pipelines.',
       status: 'In Progress',
       priority: 'High',
-      startDate: addDays(-14),
-      dueDate: addDays(25),
-      budget: 30000,
-      spent: 18500,
-      progress: 55,
-      category: 'Web Development',
-      tags: ['React', 'WebSockets', 'Tailwind', 'Node.js'],
-      teamMembers: [members[0]._id, members[1]._id, members[2]._id],
+      startDate: new Date('2025-01-20'),
+      dueDate: new Date('2025-06-15'),
+      budget: 50000,
+      spent: 32500,
+      progress: 65,
+      category: 'Infrastructure',
+      tags: ['Kubernetes', 'Cloud', 'DevOps'],
+      teamMembers: [members[3]._id],
     },
     {
       title: 'SOC2 Security Compliance & Audit',
-      description: 'Prepare documentation, audit logging, vulnerability scans, and access control matrices for annual SOC2 certification.',
-      status: 'On Hold',
+      description: 'Prepare documentation, audit logging, vulnerability scans, and access control matrices.',
+      status: 'Planning',
       priority: 'Medium',
-      startDate: addDays(-30),
-      dueDate: addDays(90),
-      budget: 20000,
-      spent: 8000,
+      startDate: new Date('2025-03-01'),
+      dueDate: new Date('2025-07-20'),
+      budget: 22000,
+      spent: 7700,
       progress: 35,
-      category: 'Security & Compliance',
-      tags: ['Security', 'Audit', 'Compliance'],
-      teamMembers: [members[3]._id, members[4]._id],
+      category: 'Security',
+      tags: ['Compliance', 'Audit', 'Security'],
+      teamMembers: [members[5]._id],
+    },
+    {
+      title: 'Payment Gateway Integration',
+      description: 'Multi-currency payments, 3D secure authentication, and fraud prevention pipeline.',
+      status: 'Completed',
+      priority: 'High',
+      startDate: new Date('2024-12-01'),
+      dueDate: new Date('2025-03-30'),
+      budget: 32000,
+      spent: 31000,
+      progress: 100,
+      category: 'Fintech',
+      tags: ['Payments', 'Stripe', 'Fintech'],
+      teamMembers: [members[1]._id],
+    },
+    {
+      title: 'Customer Portal Revamp',
+      description: 'Self-service billing, telemetry usage dashboards, and interactive support ticketing.',
+      status: 'In Progress',
+      priority: 'Medium',
+      startDate: new Date('2025-02-01'),
+      dueDate: new Date('2025-05-28'),
+      budget: 29000,
+      spent: 23200,
+      progress: 80,
+      category: 'Frontend',
+      tags: ['Customer Experience', 'UI'],
+      teamMembers: [members[0]._id],
+    },
+    {
+      title: 'Data Analytics Pipeline',
+      description: 'High-throughput event streaming, automated ETL workflows, and real-time business telemetry.',
+      status: 'In Progress',
+      priority: 'High',
+      startDate: new Date('2025-02-10'),
+      dueDate: new Date('2025-06-05'),
+      budget: 40000,
+      spent: 22000,
+      progress: 55,
+      category: 'Data Engineering',
+      tags: ['Data Pipeline', 'Analytics', 'ETL'],
+      teamMembers: [members[3]._id],
+    },
+    {
+      title: 'API Gateway Federation',
+      description: 'Federated microservices gateway with rate-limiting, edge caching, and token validation.',
+      status: 'Completed',
+      priority: 'Urgent',
+      startDate: new Date('2024-11-15'),
+      dueDate: new Date('2025-02-15'),
+      budget: 26000,
+      spent: 25800,
+      progress: 100,
+      category: 'Backend Services',
+      tags: ['APIs', 'Gateway', 'Security'],
+      teamMembers: [members[1]._id],
+    },
+    {
+      title: 'Design System 2.0',
+      description: 'Unified cross-platform component library with accessibility tokens and dark mode styling.',
+      status: 'Completed',
+      priority: 'Medium',
+      startDate: new Date('2024-12-10'),
+      dueDate: new Date('2025-03-10'),
+      budget: 18000,
+      spent: 17900,
+      progress: 100,
+      category: 'Product Design',
+      tags: ['Design System', 'UI/UX', 'Tokens'],
+      teamMembers: [members[2]._id],
+    },
+    {
+      title: 'Real-Time Messaging Engine',
+      description: 'Low-latency collaborative presence and live notification delivery service.',
+      status: 'In Progress',
+      priority: 'High',
+      startDate: new Date('2025-03-05'),
+      dueDate: new Date('2025-06-30'),
+      budget: 34000,
+      spent: 15300,
+      progress: 45,
+      category: 'Real-Time Engine',
+      tags: ['WebSockets', 'Presence', 'Messaging'],
+      teamMembers: [members[7]._id],
+    },
+    {
+      title: 'Automated QA Pipeline',
+      description: 'End-to-end regression suites, test matrix runners, and continuous performance assertions.',
+      status: 'In Progress',
+      priority: 'Low',
+      startDate: new Date('2025-02-25'),
+      dueDate: new Date('2025-05-18'),
+      budget: 20000,
+      spent: 7200,
+      progress: 36,
+      category: 'Quality Assurance',
+      tags: ['Testing', 'Automation', 'CI/CD'],
+      teamMembers: [members[4]._id],
     },
   ]);
 
-  console.log('[Seed] Database successfully seeded with initial projects and team members.');
+  console.log('[Seed] Database successfully seeded with 12 projects and 8 team members (68% avg progress).');
 };

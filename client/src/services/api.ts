@@ -91,5 +91,9 @@ api.interceptors.response.use(
 );
 
 export const checkHealth = () => api.get('/health');
+export const getProjects = (params?: Record<string, any>) => api.get('/projects', { params });
+export const getProjectStats = () => api.get('/projects/stats');
+export const getTeamMembers = (params?: Record<string, any>) => api.get('/team-members', { params });
+export const createProject = (data: any) => api.post('/projects', data);
 
 export default api;

@@ -62,7 +62,7 @@ if (process.env.NODE_ENV !== 'test') {
 // Root & Health Check Endpoints
 app.get('/', (_req: Request, res: Response) => {
   res.status(200).json({
-    message: '🚀 TMS (Task Management System) API Server is Running [TypeScript]',
+    message: '🚀 TMS (Task Management System) API Server is Running',
     cors: 'Allowed for all origins (*)',
     endpoints: {
       health: '/api/health',
@@ -116,11 +116,12 @@ app.use('/api/auth', authRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/team-members', teamMemberRoutes);
 
-// Manual Seed Endpoint (useful for testing)
-app.post('/api/seed', async (_req: Request, res: Response, next: NextFunction) => {
+// Manual Seed Endpoint (useful for testing and reset)
+app.post('/api/seed', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    await seedDatabase();
-    res.status(200).json({ success: true, message: 'Database seeded successfully' });
+    const force = req.query.force === 'true' || req.body?.force === true;
+    await seedDatabase(force);
+    res.status(200).json({ success: true, message: 'Database seeded successfully', force });
   } catch (err) {
     next(err);
   }
@@ -138,7 +139,7 @@ const startServer = async () => {
 
     app.listen(PORT, () => {
       console.log(`=========================================`);
-      console.log(`🚀 TMS Backend Server running on port ${PORT} [TypeScript]`);
+      console.log(`🚀 TMS Backend Server running on port ${PORT}`);
       console.log(`📡 Health Check: http://localhost:${PORT}/api/health`);
       console.log(`📋 Projects API: http://localhost:${PORT}/api/projects`);
       console.log(`👥 Team API:     http://localhost:${PORT}/api/team-members`);

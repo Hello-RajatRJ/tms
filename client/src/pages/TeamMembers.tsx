@@ -88,7 +88,7 @@ export const TeamMembers: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <div className="space-y-4 animate-fade-in">
       {/* Toast Notification */}
       {toast && (
         <div className="fixed bottom-6 right-6 z-50 animate-fade-in flex items-center gap-2 px-4 py-3 bg-slate-900 text-white text-xs font-semibold rounded-2xl shadow-xl border border-slate-700">
@@ -98,7 +98,7 @@ export const TeamMembers: React.FC = () => {
       )}
 
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-1">
         <div>
           <h1 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
             Team Directory
@@ -129,7 +129,7 @@ export const TeamMembers: React.FC = () => {
       </div>
 
       {/* Search and Filters */}
-      <div className="wa-card rounded-3xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-3">
+      <div className="wa-card rounded-2xl p-3 sm:p-3.5 flex flex-col md:flex-row md:items-center justify-between gap-2.5">
         <div className="relative flex-1">
           <Search className="w-4 h-4 text-[#667781] dark:text-[#8696A0] absolute left-3.5 top-1/2 -translate-y-1/2" />
           <input
@@ -143,7 +143,7 @@ export const TeamMembers: React.FC = () => {
 
         <div className="flex items-center gap-2 flex-wrap">
           {/* Department Filter */}
-          <div className="flex items-center gap-1.5 bg-[#F0F2F5]/70 dark:bg-[#182229]/60 border border-[#E9EDEF] dark:border-[#2A3942] rounded-2xl px-3 py-2">
+          <div className="flex items-center gap-1.5 bg-[#F0F2F5]/70 dark:bg-[#182229]/60 border border-[#E9EDEF] dark:border-[#2A3942] rounded-2xl px-3 py-1.5">
             <span className="text-[11px] font-bold text-[#667781] dark:text-[#8696A0]">Department:</span>
             <select
               value={selectedDepartment}
@@ -160,7 +160,7 @@ export const TeamMembers: React.FC = () => {
           </div>
 
           {/* Status Filter */}
-          <div className="flex items-center gap-1.5 bg-[#F0F2F5]/70 dark:bg-[#182229]/60 border border-[#E9EDEF] dark:border-[#2A3942] rounded-2xl px-3 py-2">
+          <div className="flex items-center gap-1.5 bg-[#F0F2F5]/70 dark:bg-[#182229]/60 border border-[#E9EDEF] dark:border-[#2A3942] rounded-2xl px-3 py-1.5">
             <span className="text-[11px] font-bold text-[#667781] dark:text-[#8696A0]">Status:</span>
             <select
               value={selectedStatus}
@@ -189,17 +189,17 @@ export const TeamMembers: React.FC = () => {
           onAction={() => setActiveModalMember({})}
         />
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredMembers.map((member) => (
             <div
               key={member._id}
-              className="wa-card rounded-3xl p-5 flex flex-col justify-between"
+              className="wa-card rounded-2xl p-4 flex flex-col justify-between"
             >
               <div>
                 {/* Header with Avatar and Actions */}
-                <div className="flex items-start justify-between mb-4">
+                <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#075E54] via-[#00A884] to-[#25D366] p-0.5 shadow-xs">
+                    <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-[#075E54] via-[#00A884] to-[#25D366] p-0.5 shadow-xs">
                       <div className="w-full h-full rounded-[14px] bg-white dark:bg-[#202C33] overflow-hidden flex items-center justify-center font-extrabold text-base text-[#00A884] dark:text-[#25D366]">
                         {member.avatar ? (
                           <img
@@ -248,7 +248,7 @@ export const TeamMembers: React.FC = () => {
                 </div>
 
                 {/* Details List */}
-                <div className="space-y-2 text-xs text-[#667781] dark:text-[#8696A0] mb-4">
+                <div className="space-y-1.5 text-xs text-[#667781] dark:text-[#8696A0] mb-3">
                   <div className="flex items-center gap-2">
                     <Mail className="w-3.5 h-3.5 text-[#00A884] shrink-0" />
                     <span className="truncate">{member.email}</span>
@@ -267,7 +267,7 @@ export const TeamMembers: React.FC = () => {
 
                 {/* Skills tags */}
                 {member.skills && member.skills.length > 0 && (
-                  <div className="flex flex-wrap gap-1.5 mb-4">
+                  <div className="flex flex-wrap gap-1.5 mb-3">
                     {member.skills.map((skill, idx) => (
                       <span
                         key={idx}
@@ -281,7 +281,7 @@ export const TeamMembers: React.FC = () => {
               </div>
 
               {/* Card Footer: Status & Project Count */}
-              <div className="pt-3 border-t border-[#E9EDEF] dark:border-[#2A3942] flex items-center justify-between">
+              <div className="pt-2.5 border-t border-[#E9EDEF] dark:border-[#2A3942] flex items-center justify-between">
                 <StatusBadge value={member.status || 'Active'} type="status" size="sm" />
                 <div className="flex items-center gap-1.5 text-xs font-bold text-[#111B21] dark:text-[#E9EDEF]">
                   <FolderKanban className="w-3.5 h-3.5 text-[#00A884]" />
@@ -489,7 +489,7 @@ const MemberFormModal: React.FC<{
                 name="role"
                 value={formData.role}
                 onChange={handleChange}
-                placeholder="Senior React Engineer"
+                placeholder="Senior Technical Lead"
                 className="w-full px-3.5 py-2.5 text-sm rounded-2xl border border-[#E9EDEF] dark:border-[#2A3942] bg-white dark:bg-[#222E35] text-[#111B21] dark:text-[#E9EDEF] wa-input"
               />
             </div>
@@ -571,7 +571,7 @@ const MemberFormModal: React.FC<{
               name="skills"
               value={formData.skills}
               onChange={handleChange}
-              placeholder="React, Node.js, GraphQL, Docker"
+              placeholder="Architecture, Cloud, Operations, Quality"
               className="w-full px-3.5 py-2.5 text-sm rounded-2xl border border-[#E9EDEF] dark:border-[#2A3942] bg-white dark:bg-[#222E35] text-[#111B21] dark:text-[#E9EDEF] wa-input"
             />
           </div>

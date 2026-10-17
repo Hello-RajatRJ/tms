@@ -76,37 +76,28 @@ export const ProfileMenu: React.FC = () => {
       {/* Trigger Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2.5 p-1.5 pl-2.5 pr-2 rounded-2xl bg-white dark:bg-[#202C33] hover:bg-[#F0F2F5] dark:hover:bg-[#2A3942] border border-[#E9EDEF] dark:border-[#2A3942] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#00A884]/40 shadow-2xs"
+        className="flex items-center gap-2.5 p-1 rounded-full hover:bg-black/5 dark:hover:bg-white/5 transition-all duration-200 focus:outline-none cursor-pointer"
         aria-expanded={isOpen}
       >
         <div className="relative">
-          {user.avatar ? (
-            <img
-              src={user.avatar}
-              alt={user.name}
-              className="w-8 h-8 rounded-xl object-cover ring-2 ring-[#00A884]/30"
-            />
-          ) : (
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#075E54] to-[#00A884] text-white font-bold text-xs flex items-center justify-center shadow-xs">
-              {getInitials(user.name)}
-            </div>
-          )}
-          <span
-            className={`absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full ring-2 ring-white dark:ring-[#202C33] ${roleBadgeConfig.dotClass}`}
+          <img
+            src={user.avatar || 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150'}
+            alt={user.name}
+            className="w-8 h-8 rounded-full object-cover"
           />
         </div>
 
         <div className="hidden sm:flex flex-col items-start text-left">
-          <span className="text-xs font-bold text-[#111B21] dark:text-[#E9EDEF] line-clamp-1 max-w-[120px]">
+          <span className="text-xs font-bold text-[#111B21] dark:text-[#E9EDEF] line-clamp-1 max-w-[120px] leading-tight">
             {user.name}
           </span>
-          <span className="text-[10px] text-[#667781] dark:text-[#8696A0] capitalize font-medium">
+          <span className="text-[10px] text-[#667781] dark:text-[#8696A0] capitalize font-medium leading-tight">
             {user.role}
           </span>
         </div>
 
         <ChevronDown
-          className={`w-4 h-4 text-[#667781] dark:text-[#8696A0] transition-transform duration-200 ${
+          className={`w-3.5 h-3.5 text-[#667781] dark:text-[#8696A0] transition-transform duration-200 ${
             isOpen ? 'rotate-180' : ''
           }`}
         />

@@ -60,7 +60,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
   };
 
   return (
-    <div className="group relative wa-card rounded-3xl p-5 flex flex-col justify-between">
+    <div className="group relative wa-card rounded-2xl p-4 sm:p-4.5 flex flex-col justify-between">
       <div>
         {/* Header Badges & Actions Menu */}
         <div className="flex items-center justify-between gap-2 mb-3">
@@ -139,13 +139,13 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
         <h3 className="text-base font-extrabold text-[#111B21] dark:text-[#E9EDEF] tracking-tight mb-1.5 group-hover:text-[#00A884] dark:group-hover:text-[#25D366] transition-colors">
           {title}
         </h3>
-        <p className="text-xs text-[#667781] dark:text-[#8696A0] line-clamp-2 leading-relaxed mb-4">
+        <p className="text-xs text-[#667781] dark:text-[#8696A0] line-clamp-2 leading-relaxed mb-3">
           {description}
         </p>
 
         {/* Tags */}
         {tags && tags.length > 0 && (
-          <div className="flex flex-wrap gap-1.5 mb-4">
+          <div className="flex flex-wrap gap-1.5 mb-3">
             {tags.slice(0, 3).map((tag, i) => (
               <span
                 key={i}

@@ -85,7 +85,7 @@ export const Projects: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <div className="space-y-4 animate-fade-in">
       {/* Toast Notification */}
       {toast && (
         <div className="fixed bottom-6 right-6 z-50 animate-fade-in flex items-center gap-2 px-4 py-3 bg-slate-900 text-white text-xs font-semibold rounded-2xl shadow-xl border border-slate-700">
@@ -95,7 +95,7 @@ export const Projects: React.FC = () => {
       )}
 
       {/* Header and Action */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-1">
         <div>
           <h1 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
             Projects Management
@@ -126,7 +126,7 @@ export const Projects: React.FC = () => {
       </div>
 
       {/* Controls: Search, Filters & View Mode */}
-      <div className="wa-card rounded-3xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-3">
+      <div className="wa-card rounded-2xl p-3 sm:p-3.5 flex flex-col md:flex-row md:items-center justify-between gap-2.5">
         {/* Search Input */}
         <div className="relative flex-1">
           <Search className="w-4 h-4 text-[#667781] dark:text-[#8696A0] absolute left-3.5 top-1/2 -translate-y-1/2" />
@@ -235,7 +235,7 @@ export const Projects: React.FC = () => {
         />
       ) : viewMode === 'grid' ? (
         /* Grid View */
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredProjects.map((project) => (
             <ProjectCard
               key={project._id}

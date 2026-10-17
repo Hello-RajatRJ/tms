@@ -361,7 +361,7 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
               name="tags"
               value={formData.tags}
               onChange={handleChange}
-              placeholder="React, AWS, Security, UI"
+              placeholder="Architecture, Security, Operations, Product"
               className="w-full px-3.5 py-2.5 text-sm rounded-2xl border border-[#E9EDEF] dark:border-[#2A3942] bg-white dark:bg-[#222E35] text-[#111B21] dark:text-[#E9EDEF] wa-input"
             />
           </div>
