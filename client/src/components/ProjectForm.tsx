@@ -149,10 +149,8 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 modal-wa-backdrop overflow-y-auto">
       <div className="relative w-full max-w-2xl bg-white dark:bg-[#202C33] rounded-3xl modal-wa-container border border-[#E9EDEF] dark:border-[#2A3942] overflow-hidden my-8 animate-fade-in">
-        {/* Top Emerald Accent Bar */}
         <div className="h-1.5 w-full bg-gradient-to-r from-[#075E54] via-[#00A884] to-[#25D366]" />
 
-        {/* Modal Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-[#E9EDEF] dark:border-[#2A3942] bg-[#F0F2F5]/70 dark:bg-[#182229]/80">
           <div>
             <h2 className="text-lg font-extrabold text-[#111B21] dark:text-[#E9EDEF] tracking-tight">
@@ -172,7 +170,6 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
           </button>
         </div>
 
-        {/* Form Body */}
         <form onSubmit={handleSubmit} className="p-6 space-y-4 max-h-[75vh] overflow-y-auto">
           {errors.form && (
             <div className="p-3 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900 rounded-2xl text-xs text-rose-700 dark:text-rose-400">
@@ -180,7 +177,6 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
             </div>
           )}
 
-          {/* Title */}
           <div>
             <label className="block text-xs font-bold text-[#111B21] dark:text-[#E9EDEF] mb-1.5">
               Project Title <span className="text-rose-500">*</span>
@@ -200,7 +196,6 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
             {errors.title && <p className="text-[11px] text-rose-500 mt-1">{errors.title}</p>}
           </div>
 
-          {/* Description */}
           <div>
             <label className="block text-xs font-bold text-[#111B21] dark:text-[#E9EDEF] mb-1.5">
               Description <span className="text-rose-500">*</span>
@@ -222,7 +217,6 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
             )}
           </div>
 
-          {/* Status, Priority, Category (3 Columns) */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div>
               <label className="block text-xs font-bold text-[#111B21] dark:text-[#E9EDEF] mb-1.5">
@@ -278,7 +272,6 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
             </div>
           </div>
 
-          {/* Due Date & Progress Slider */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-bold text-[#111B21] dark:text-[#E9EDEF] mb-1.5">
@@ -318,7 +311,6 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
             </div>
           </div>
 
-          {/* Budget & Spent */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-bold text-[#111B21] dark:text-[#E9EDEF] mb-1.5">
@@ -351,7 +343,6 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
             </div>
           </div>
 
-          {/* Tags */}
           <div>
             <label className="block text-xs font-bold text-[#111B21] dark:text-[#E9EDEF] mb-1.5">
               Tags (comma-separated)
@@ -366,7 +357,6 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
             />
           </div>
 
-          {/* Assign Team Members Multi-select */}
           <div>
             <label className="block text-xs font-bold text-[#111B21] dark:text-[#E9EDEF] mb-2">
               Assign Team Members ({formData.teamMembers.length} selected)
@@ -415,7 +405,6 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
             )}
           </div>
 
-          {/* Modal Footer Buttons */}
           <div className="pt-4 border-t border-[#E9EDEF] dark:border-[#2A3942] flex justify-end gap-3">
             <button
               type="button"

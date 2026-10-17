@@ -63,7 +63,6 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
     }));
   },
 
-  // Fetch all projects with query parameters
   fetchProjects: async (params = {}) => {
     set({ loading: true, error: null });
     try {
@@ -74,19 +73,16 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
     }
   },
 
-  // Fetch stats for dashboard
   fetchStats: async () => {
     set({ statsLoading: true });
     try {
       const res = (await api.get('/projects/stats')) as any;
       set({ stats: res.data, statsLoading: false });
-    } catch (err) {
-      console.error('Failed to load dashboard statistics:', err);
+    } catch {
       set({ statsLoading: false });
     }
   },
 
-  // Create project
   createProject: async (projectData) => {
     try {
       const res = (await api.post('/projects', projectData)) as any;
@@ -102,7 +98,6 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
     }
   },
 
-  // Update project
   updateProject: async (id, projectData) => {
     try {
       const res = (await api.patch(`/projects/${id}`, projectData)) as any;
@@ -118,7 +113,6 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
     }
   },
 
-  // Quick status update
   updateProjectStatus: async (id, newStatus) => {
     try {
       const res = (await api.patch(`/projects/${id}`, { status: newStatus })) as any;
@@ -134,7 +128,6 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
     }
   },
 
-  // Delete project
   deleteProject: async (id) => {
     try {
       await api.delete(`/projects/${id}`);

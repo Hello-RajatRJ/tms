@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from 'express';
 import { TeamMember } from '../models/TeamMember';
 import { Project } from '../models/Project';
 
-// GET /api/team-members - List all team members
 export const getTeamMembers = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const { search, status, department } = req.query as {
@@ -31,7 +30,6 @@ export const getTeamMembers = async (req: Request, res: Response, next: NextFunc
 
     const members = await TeamMember.find(query).sort({ createdAt: -1 });
 
-    // Attach assigned project counts
     const membersWithProjectCounts = await Promise.all(
       members.map(async (member) => {
         const projectCount = await Project.countDocuments({ teamMembers: member._id });
@@ -53,7 +51,6 @@ export const getTeamMembers = async (req: Request, res: Response, next: NextFunc
   }
 };
 
-// GET /api/team-members/:id - Get single team member
 export const getTeamMemberById = async (req: Request, res: Response, next: NextFunction): Promise<void | Response> => {
   try {
     const member = await TeamMember.findById(req.params.id);
@@ -82,7 +79,6 @@ export const getTeamMemberById = async (req: Request, res: Response, next: NextF
   }
 };
 
-// POST /api/team-members - Add new team member
 export const createTeamMember = async (req: Request, res: Response, next: NextFunction): Promise<void | Response> => {
   try {
     const { email } = req.body;
@@ -106,7 +102,6 @@ export const createTeamMember = async (req: Request, res: Response, next: NextFu
   }
 };
 
-// PATCH /api/team-members/:id - Update team member
 export const updateTeamMember = async (req: Request, res: Response, next: NextFunction): Promise<void | Response> => {
   try {
     if (req.body.email) {
@@ -145,7 +140,6 @@ export const updateTeamMember = async (req: Request, res: Response, next: NextFu
   }
 };
 
-// DELETE /api/team-members/:id - Delete team member
 export const deleteTeamMember = async (req: Request, res: Response, next: NextFunction): Promise<void | Response> => {
   try {
     const member = await TeamMember.findById(req.params.id);
@@ -156,7 +150,6 @@ export const deleteTeamMember = async (req: Request, res: Response, next: NextFu
       });
     }
 
-    // Unassign from projects before deleting
     await Project.updateMany({ teamMembers: member._id }, { $pull: { teamMembers: member._id } });
 
     await member.deleteOne();

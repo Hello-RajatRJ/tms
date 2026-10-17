@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from 'express';
 import { z, ZodSchema } from 'zod';
 import mongoose from 'mongoose';
 
-// ObjectId validation helper
 export const isValidObjectId = (id: string): boolean => mongoose.Types.ObjectId.isValid(id);
 
 export const validateObjectIdParam = (paramName: string = 'id') => {
@@ -18,7 +17,6 @@ export const validateObjectIdParam = (paramName: string = 'id') => {
   };
 };
 
-// Team Member Schemas
 export const createTeamMemberSchema = z.object({
   name: z.string().trim().min(2, 'Name must be at least 2 characters').max(100, 'Name cannot exceed 100 characters'),
   email: z.string().trim().email('Invalid email address format'),
@@ -32,7 +30,6 @@ export const createTeamMemberSchema = z.object({
 
 export const updateTeamMemberSchema = createTeamMemberSchema.partial();
 
-// Project Schemas
 export const createProjectSchema = z.object({
   title: z.string().trim().min(2, 'Title must be at least 2 characters').max(150, 'Title cannot exceed 150 characters'),
   description: z.string().trim().min(3, 'Description must be at least 3 characters').max(2000, 'Description cannot exceed 2000 characters'),
@@ -65,7 +62,6 @@ export const updateProjectSchema = z.object({
   tags: z.array(z.string()).optional(),
 });
 
-// Generic Zod validator middleware
 export const validateBody = (schema: ZodSchema) => {
   return (req: Request, res: Response, next: NextFunction): void | Response => {
     try {

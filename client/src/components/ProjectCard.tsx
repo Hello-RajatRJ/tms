@@ -39,19 +39,16 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
     tags = [],
   } = project;
 
-  // Format Due Date
   const dateObj = new Date(dueDate);
   const formattedDate = !isNaN(dateObj.getTime())
     ? dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
     : 'No Date';
 
-  // Days left calculation
   const now = new Date();
   const diffTime = dateObj.getTime() - now.getTime();
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   const isOverdue = diffDays < 0 && status !== 'Completed';
 
-  // Progress Bar color
   const getProgressColor = () => {
     if (progress >= 100 || status === 'Completed') return 'bg-[#25D366]';
     if (progress >= 60) return 'bg-[#00A884]';
@@ -62,7 +59,6 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
   return (
     <div className="group relative wa-card rounded-2xl p-4 sm:p-4.5 flex flex-col justify-between">
       <div>
-        {/* Header Badges & Actions Menu */}
         <div className="flex items-center justify-between gap-2 mb-3">
           <div className="flex items-center gap-1.5 flex-wrap">
             <StatusBadge value={status} type="status" size="sm" />
@@ -74,7 +70,6 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
             )}
           </div>
 
-          {/* Action Menu (Restricted by Role) */}
           {canManage() && (
             <div className="relative">
               <button
@@ -135,7 +130,6 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
           )}
         </div>
 
-        {/* Title & Description */}
         <h3 className="text-base font-extrabold text-[#111B21] dark:text-[#E9EDEF] tracking-tight mb-1.5 group-hover:text-[#00A884] dark:group-hover:text-[#25D366] transition-colors">
           {title}
         </h3>
@@ -143,7 +137,6 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
           {description}
         </p>
 
-        {/* Tags */}
         {tags && tags.length > 0 && (
           <div className="flex flex-wrap gap-1.5 mb-3">
             {tags.slice(0, 3).map((tag, i) => (
@@ -163,9 +156,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
         )}
       </div>
 
-      {/* Footer Details: Progress, Due Date, Team */}
       <div className="pt-3 border-t border-[#E9EDEF] dark:border-[#2A3942] space-y-3">
-        {/* Progress Bar */}
         <div>
           <div className="flex justify-between items-center text-xs font-bold text-[#667781] dark:text-[#8696A0] mb-1.5">
             <span>Progress</span>
@@ -179,9 +170,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
           </div>
         </div>
 
-        {/* Due Date & Team Avatars */}
         <div className="flex items-center justify-between pt-1">
-          {/* Due Date */}
           <div
             className={`flex items-center gap-1.5 text-xs font-semibold ${
               isOverdue
@@ -195,7 +184,6 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
             </span>
           </div>
 
-          {/* Team Member Avatars */}
           <div className="flex items-center -space-x-2">
             {teamMembers.slice(0, 4).map((m: any, idx: number) => (
               <div

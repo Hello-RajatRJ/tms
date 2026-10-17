@@ -3,7 +3,6 @@ import jwt from 'jsonwebtoken';
 import { User, IUserDocument } from '../models/User';
 import { AuthenticatedRequest } from '../middleware/authMiddleware';
 
-// Helper to generate JWT Token
 const generateToken = (user: IUserDocument): string => {
   return jwt.sign(
     { id: user._id, role: user.role, email: user.email },
@@ -12,7 +11,6 @@ const generateToken = (user: IUserDocument): string => {
   );
 };
 
-// POST /api/auth/register
 export const register = async (req: Request, res: Response, next: NextFunction): Promise<void | Response> => {
   try {
     const { name, email, password, role = 'member', title = 'Team Member' } = req.body;
@@ -69,7 +67,6 @@ export const register = async (req: Request, res: Response, next: NextFunction):
   }
 };
 
-// POST /api/auth/login
 export const login = async (req: Request, res: Response, next: NextFunction): Promise<void | Response> => {
   try {
     const { email, password } = req.body;
@@ -117,7 +114,6 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
   }
 };
 
-// GET /api/auth/me (Protected)
 export const getMe = async (req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void | Response> => {
   try {
     if (!req.user) {

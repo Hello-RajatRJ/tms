@@ -75,9 +75,7 @@ export const Projects: React.FC = () => {
     try {
       await deleteProject(projectToDelete._id);
       setProjectToDelete(null);
-    } catch (err) {
-      console.error(err);
-    }
+    } catch {}
   };
 
   const handleStatusChange = async (projectId: string, newStatus: string) => {
@@ -86,7 +84,6 @@ export const Projects: React.FC = () => {
 
   return (
     <div className="space-y-4 animate-fade-in">
-      {/* Toast Notification */}
       {toast && (
         <div className="fixed bottom-6 right-6 z-50 animate-fade-in flex items-center gap-2 px-4 py-3 bg-slate-900 text-white text-xs font-semibold rounded-2xl shadow-xl border border-slate-700">
           <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" />
@@ -94,7 +91,6 @@ export const Projects: React.FC = () => {
         </div>
       )}
 
-      {/* Header and Action */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-1">
         <div>
           <h1 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
@@ -125,9 +121,7 @@ export const Projects: React.FC = () => {
         </div>
       </div>
 
-      {/* Controls: Search, Filters & View Mode */}
       <div className="wa-card rounded-2xl p-3 sm:p-3.5 flex flex-col md:flex-row md:items-center justify-between gap-2.5">
-        {/* Search Input */}
         <div className="relative flex-1">
           <Search className="w-4 h-4 text-[#667781] dark:text-[#8696A0] absolute left-3.5 top-1/2 -translate-y-1/2" />
           <input
@@ -147,9 +141,7 @@ export const Projects: React.FC = () => {
           )}
         </div>
 
-        {/* Filter Dropdowns */}
         <div className="flex items-center gap-2 flex-wrap">
-          {/* Status Filter */}
           <div className="flex items-center gap-1.5 bg-[#F0F2F5]/70 dark:bg-[#182229]/60 border border-[#E9EDEF] dark:border-[#2A3942] rounded-2xl px-3 py-2">
             <span className="text-[11px] font-bold text-[#667781] dark:text-[#8696A0]">Status:</span>
             <select
@@ -165,7 +157,6 @@ export const Projects: React.FC = () => {
             </select>
           </div>
 
-          {/* Priority Filter */}
           <div className="flex items-center gap-1.5 bg-[#F0F2F5]/70 dark:bg-[#182229]/60 border border-[#E9EDEF] dark:border-[#2A3942] rounded-2xl px-3 py-2">
             <span className="text-[11px] font-bold text-[#667781] dark:text-[#8696A0]">Priority:</span>
             <select
@@ -181,7 +172,6 @@ export const Projects: React.FC = () => {
             </select>
           </div>
 
-          {/* View Toggle */}
           <div className="flex items-center border border-[#E9EDEF] dark:border-[#2A3942] rounded-2xl p-1 bg-[#F0F2F5]/70 dark:bg-[#182229]/60">
             <button
               onClick={() => setViewMode('grid')}
@@ -209,7 +199,6 @@ export const Projects: React.FC = () => {
         </div>
       </div>
 
-      {/* Projects Content Body */}
       {loading ? (
         <CardSkeletonGrid count={6} />
       ) : error ? (
@@ -234,7 +223,6 @@ export const Projects: React.FC = () => {
           }}
         />
       ) : viewMode === 'grid' ? (
-        /* Grid View */
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredProjects.map((project) => (
             <ProjectCard
@@ -247,7 +235,6 @@ export const Projects: React.FC = () => {
           ))}
         </div>
       ) : (
-        /* Table View */
         <div className="wa-card rounded-3xl overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
@@ -334,7 +321,6 @@ export const Projects: React.FC = () => {
         </div>
       )}
 
-      {/* Project Form Modal (Create or Edit) */}
       {activeModalProject !== null && (
         <ProjectForm
           project={activeModalProject._id ? (activeModalProject as Project) : null}
@@ -344,11 +330,9 @@ export const Projects: React.FC = () => {
         />
       )}
 
-      {/* Delete Confirmation Modal */}
       {projectToDelete && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 modal-wa-backdrop animate-fade-in">
           <div className="w-full max-w-md bg-white dark:bg-[#202C33] rounded-3xl modal-wa-container border border-[#E9EDEF] dark:border-[#2A3942] p-6 text-center space-y-4">
-            {/* Top accent icon */}
             <div className="w-12 h-12 rounded-2xl bg-rose-100 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 flex items-center justify-center mx-auto shadow-xs">
               <Trash2 className="w-6 h-6" />
             </div>

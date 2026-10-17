@@ -3,7 +3,6 @@ import { Project } from '../models/Project';
 import { User } from '../models/User';
 
 export const seedDatabase = async (force: boolean = false): Promise<void> => {
-  // 1. Seed Users for Auth & Role Based Access Control
   const defaultUsers = [
     {
       name: 'Alex Rivera',
@@ -50,19 +49,14 @@ export const seedDatabase = async (force: boolean = false): Promise<void> => {
 
   const memberCount = await TeamMember.countDocuments();
   if (memberCount > 0 && !force) {
-    console.log('[Seed] Database already contains records. Skipping seed.');
     return;
   }
 
   if (force) {
-    console.log('[Seed] Force reset active. Clearing old collections...');
     await Project.deleteMany({});
     await TeamMember.deleteMany({});
   }
 
-  console.log('[Seed] Seeding reference dataset (8 team members, 12 projects)...');
-
-  // Seed 8 Team Members matching mockup
   const members = await TeamMember.create([
     {
       name: 'Maya Chen',
@@ -146,10 +140,7 @@ export const seedDatabase = async (force: boolean = false): Promise<void> => {
     },
   ]);
 
-  // Seed 12 Projects: Exactly 4 Completed, 6 In Progress, 2 Planning (Pending)
-  // Average Progress: (70+100+30+65+35+100+80+55+100+100+45+36) / 12 = 816 / 12 = 68%
   await Project.create([
-    // Row 1 in Recent Projects: Website Redesign
     {
       title: 'Website Redesign',
       description: 'Redesign the company website with modern UI/UX',
@@ -164,7 +155,6 @@ export const seedDatabase = async (force: boolean = false): Promise<void> => {
       tags: ['Design System', 'Frontend', 'Performance'],
       teamMembers: [members[0]._id],
     },
-    // Row 2 in Recent Projects: CRM Integration
     {
       title: 'CRM Integration',
       description: 'Integrate CRM with existing platform',
@@ -179,7 +169,6 @@ export const seedDatabase = async (force: boolean = false): Promise<void> => {
       tags: ['CRM', 'APIs', 'Sync', 'Integrations'],
       teamMembers: [members[1]._id],
     },
-    // Row 3 in Recent Projects: Mobile App
     {
       title: 'Mobile App',
       description: 'Build cross-platform mobile application',
@@ -194,7 +183,6 @@ export const seedDatabase = async (force: boolean = false): Promise<void> => {
       tags: ['Mobile', 'iOS', 'Android', 'Design'],
       teamMembers: [members[2]._id],
     },
-    // Remaining Projects for telemetry metrics (12 total, 4 completed, 6 in progress, 2 planning)
     {
       title: 'Cloud Infrastructure Modernization',
       description: 'Migrate legacy microservices to Kubernetes on AWS EKS with automated CI/CD pipelines.',
@@ -322,6 +310,4 @@ export const seedDatabase = async (force: boolean = false): Promise<void> => {
       teamMembers: [members[4]._id],
     },
   ]);
-
-  console.log('[Seed] Database successfully seeded with 12 projects and 8 team members (68% avg progress).');
 };

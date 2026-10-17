@@ -23,7 +23,7 @@ const applyThemeToDOM = (theme: ThemeMode) => {
 export const useThemeStore = create<ThemeState>()(
   persist(
     (set) => ({
-      theme: 'dark', // Default to sleek dark mode
+      theme: 'dark',
       toggleTheme: () =>
         set((state) => {
           const nextTheme = state.theme === 'dark' ? 'light' : 'dark';

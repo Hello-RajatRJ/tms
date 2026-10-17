@@ -2,13 +2,10 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   LogOut,
-  User as UserIcon,
   Shield,
   Sun,
   Moon,
   ChevronDown,
-  Sparkles,
-  CheckCircle2,
 } from 'lucide-react';
 import { useAuthStore } from '../store/useAuthStore';
 import { useThemeStore } from '../store/useThemeStore';
@@ -22,7 +19,6 @@ export const ProfileMenu: React.FC = () => {
   const { theme, toggleTheme } = useThemeStore();
   const isDark = theme === 'dark';
 
-  // Close dropdown on click outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
@@ -73,7 +69,6 @@ export const ProfileMenu: React.FC = () => {
 
   return (
     <div className="relative" ref={menuRef}>
-      {/* Trigger Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center gap-2.5 p-1 rounded-full hover:bg-black/5 dark:hover:bg-white/5 transition-all duration-200 focus:outline-none cursor-pointer"
@@ -103,13 +98,10 @@ export const ProfileMenu: React.FC = () => {
         />
       </button>
 
-      {/* Dropdown Panel */}
       {isOpen && (
         <div className="absolute right-0 mt-2 w-72 rounded-3xl bg-white dark:bg-[#202C33] border border-[#E9EDEF] dark:border-[#2A3942] modal-wa-container py-2.5 z-50 animate-in fade-in zoom-in-95 duration-150 overflow-hidden">
-          {/* Top Emerald Line */}
           <div className="h-1 -mt-2.5 mb-2 w-full bg-gradient-to-r from-[#075E54] via-[#00A884] to-[#25D366]" />
 
-          {/* User Details Header */}
           <div className="px-4 py-3 border-b border-[#E9EDEF] dark:border-[#2A3942]">
             <div className="flex items-center gap-3">
               {user.avatar ? (
@@ -142,7 +134,6 @@ export const ProfileMenu: React.FC = () => {
             </div>
           </div>
 
-          {/* Role Status Overview */}
           <div className="px-4 py-2.5 my-1 mx-2 rounded-2xl bg-[#F0F2F5] dark:bg-[#222E35] border border-[#E9EDEF] dark:border-[#2A3942]">
             <div className="flex items-center justify-between text-xs text-[#111B21] dark:text-[#E9EDEF]">
               <span className="flex items-center gap-1.5 font-semibold">
@@ -155,7 +146,6 @@ export const ProfileMenu: React.FC = () => {
             </div>
           </div>
 
-          {/* Theme Switcher Row */}
           <div className="px-2 py-1">
             <button
               onClick={toggleTheme}
@@ -177,7 +167,6 @@ export const ProfileMenu: React.FC = () => {
 
           <div className="h-px bg-[#E9EDEF] dark:bg-[#2A3942] my-1" />
 
-          {/* Logout Action */}
           <div className="px-2 pt-1 pb-0.5">
             <button
               onClick={handleLogout}

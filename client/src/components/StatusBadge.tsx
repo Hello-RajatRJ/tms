@@ -24,7 +24,6 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
   const getStyles = () => {
     const val = String(value).toLowerCase();
 
-    // Priority styles
     if (type === 'priority') {
       switch (val) {
         case 'urgent':
@@ -51,7 +50,6 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
       }
     }
 
-    // Status styles (Project or Team Member)
     switch (val) {
       case 'completed':
       case 'active':

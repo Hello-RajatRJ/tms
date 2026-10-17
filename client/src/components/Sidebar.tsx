@@ -8,7 +8,6 @@ import {
   ChevronRight,
   Menu,
   X,
-  LogOut,
 } from 'lucide-react';
 import { useAuthStore } from '../store/useAuthStore';
 import ThemeToggle from './ThemeToggle';
@@ -26,7 +25,6 @@ export const Sidebar: React.FC = () => {
 
   const sidebarContent = (
     <div className="flex flex-col h-full bg-white dark:bg-[#111B21] border-r border-[#E9EDEF] dark:border-[#202C33] w-64 p-5 transition-colors duration-200">
-      {/* Brand Header */}
       <div className="flex items-center justify-between pb-6 border-b border-[#E9EDEF] dark:border-[#202C33] mb-6">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#00A884] via-[#059669] to-[#25D366] flex items-center justify-center text-white shadow-md shadow-[#00A884]/20">
@@ -49,7 +47,6 @@ export const Sidebar: React.FC = () => {
         </div>
       </div>
 
-      {/* Navigation Items */}
       <div className="flex-1 space-y-1.5">
         {navItems.map((item) => {
           const Icon = item.icon;
@@ -73,7 +70,6 @@ export const Sidebar: React.FC = () => {
         })}
       </div>
 
-      {/* User Session Footer (Matches Reference Image) */}
       {user && (
         <div className="mt-auto pt-4 border-t border-[#E9EDEF] dark:border-[#202C33]">
           <div
@@ -107,7 +103,6 @@ export const Sidebar: React.FC = () => {
 
   return (
     <>
-      {/* Mobile Top Header */}
       <div className="lg:hidden flex items-center justify-between p-4 bg-white dark:bg-[#111B21] border-b border-[#E9EDEF] dark:border-[#202C33] sticky top-0 z-30">
         <div className="flex items-center gap-2.5">
           <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#00A884] to-[#25D366] flex items-center justify-center text-white shadow-xs">
@@ -127,12 +122,10 @@ export const Sidebar: React.FC = () => {
         </div>
       </div>
 
-      {/* Desktop Fixed Sidebar */}
       <aside className="hidden lg:block shrink-0 h-screen sticky top-0 z-20">
         {sidebarContent}
       </aside>
 
-      {/* Mobile Drawer */}
       {mobileOpen && (
         <div className="lg:hidden fixed inset-0 z-40 flex">
           <div

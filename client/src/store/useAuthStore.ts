@@ -27,7 +27,6 @@ export const useAuthStore = create<AuthState>()(
       loading: false,
       error: null,
 
-      // Login action
       login: async (email, password) => {
         set({ loading: true, error: null });
         try {
@@ -52,7 +51,6 @@ export const useAuthStore = create<AuthState>()(
         }
       },
 
-      // Register action
       register: async (userData) => {
         set({ loading: true, error: null });
         try {
@@ -77,7 +75,6 @@ export const useAuthStore = create<AuthState>()(
         }
       },
 
-      // Logout action
       logout: () => {
         set({
           user: null,
@@ -88,7 +85,6 @@ export const useAuthStore = create<AuthState>()(
         });
       },
 
-      // Check / Refresh current user profile
       checkAuth: async () => {
         const { token } = get();
         if (!token) {
@@ -106,15 +102,13 @@ export const useAuthStore = create<AuthState>()(
               loading: false,
             });
           }
-        } catch (err: any) {
-          console.warn('Auth token expired or invalid:', err.message);
+        } catch {
           get().logout();
         } finally {
           set({ loading: false });
         }
       },
 
-      // Role check helpers
       hasRole: (...roles) => {
         const user = get().user;
         if (!user || !user.role) return false;

@@ -17,19 +17,15 @@ import { protect, authorize } from '../middleware/authMiddleware';
 
 const router = Router();
 
-// Protect all project routes
 router.use(protect as any);
 
-// GET /api/projects/stats - Dashboard analytics
 router.get('/stats', getProjectStats as any);
 
-// GET /api/projects & POST /api/projects
 router
   .route('/')
   .get(getProjects as any)
   .post(authorize('admin', 'manager') as any, validateBody(createProjectSchema) as any, createProject as any);
 
-// GET, PATCH, DELETE /api/projects/:id
 router
   .route('/:id')
   .all(validateObjectIdParam('id') as any)

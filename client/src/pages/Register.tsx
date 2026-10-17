@@ -75,7 +75,6 @@ export const Register: React.FC = () => {
         </div>
 
         <div className="bg-white dark:bg-[#202C33] border border-[#E9EDEF] dark:border-[#2A3942] rounded-3xl p-7 modal-wa-container animate-fade-in space-y-4 overflow-hidden relative">
-          {/* Top Emerald Accent Bar */}
           <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#075E54] via-[#00A884] to-[#25D366]" />
 
           {error && (

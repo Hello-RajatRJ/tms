@@ -13,10 +13,8 @@ import { errorHandler, notFoundHandler } from './middleware/errorHandler';
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Universal CORS Configuration - Allows all origins, methods, and headers
 const corsOptions: CorsOptions = {
   origin: (_origin, callback) => {
-    // Dynamically reflect origin to support any client origin with credentials
     callback(null, true);
   },
   credentials: true,
@@ -37,7 +35,6 @@ const corsOptions: CorsOptions = {
 
 app.use(cors(corsOptions));
 
-// Explicit manual preflight fallback & CORS header enforcement
 app.use((req: Request, res: Response, next: NextFunction) => {
   const reqOrigin = req.headers.origin || '*';
   res.header('Access-Control-Allow-Origin', reqOrigin);
@@ -59,11 +56,10 @@ if (process.env.NODE_ENV !== 'test') {
   app.use(morgan('dev'));
 }
 
-// Root & Health Check Endpoints
 app.get('/', (_req: Request, res: Response) => {
   res.status(200).json({
-    message: '🚀 TMS (Task Management System) API Server is Running',
-    cors: 'Allowed for all origins (*)',
+    message: 'TMS API Server',
+    status: 'online',
     endpoints: {
       health: '/api/health',
       auth: {
@@ -80,7 +76,6 @@ app.get('/', (_req: Request, res: Response) => {
 app.get('/api', (_req: Request, res: Response) => {
   res.status(200).json({
     message: 'TMS API Root',
-    cors: 'Allowed for all origins (*)',
     endpoints: {
       health: '/api/health',
       login: 'POST /api/auth/login',
@@ -99,24 +94,16 @@ app.get('/api/health', (_req: Request, res: Response) => {
   });
 });
 
-// Friendly GET helper for login endpoint if visited via browser URL bar
 app.get('/api/auth/login', (_req: Request, res: Response) => {
   res.status(200).json({
-    message: 'TMS Auth Login Endpoint: Please send a POST request with JSON payload { email, password }.',
-    example: {
-      method: 'POST',
-      url: '/api/auth/login',
-      body: { email: 'admin@tms.io', password: 'YourPassword123' },
-    },
+    message: 'Send a POST request with { email, password }.',
   });
 });
 
-// API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/team-members', teamMemberRoutes);
 
-// Manual Seed Endpoint (useful for testing and reset)
 app.post('/api/seed', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const force = req.query.force === 'true' || req.body?.force === true;
@@ -127,26 +114,16 @@ app.post('/api/seed', async (req: Request, res: Response, next: NextFunction) =>
   }
 });
 
-// Error handling middleware
 app.use(notFoundHandler);
 app.use(errorHandler);
 
-// Start server
 const startServer = async () => {
   try {
     await connectDB();
     await seedDatabase();
 
-    app.listen(PORT, () => {
-      console.log(`=========================================`);
-      console.log(`🚀 TMS Backend Server running on port ${PORT}`);
-      console.log(`📡 Health Check: http://localhost:${PORT}/api/health`);
-      console.log(`📋 Projects API: http://localhost:${PORT}/api/projects`);
-      console.log(`👥 Team API:     http://localhost:${PORT}/api/team-members`);
-      console.log(`=========================================`);
-    });
-  } catch (err) {
-    console.error('Fatal error starting server:', err);
+    app.listen(PORT);
+  } catch {
     process.exit(1);
   }
 };

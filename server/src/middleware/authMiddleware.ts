@@ -6,7 +6,6 @@ export interface AuthenticatedRequest extends Request {
   user?: IUserDocument;
 }
 
-// Protect routes - Verify JWT token
 export const protect = async (
   req: AuthenticatedRequest,
   res: Response,
@@ -42,7 +41,7 @@ export const protect = async (
 
     req.user = user;
     next();
-  } catch (err) {
+  } catch {
     return res.status(401).json({
       success: false,
       message: 'Invalid or expired authentication token. Please log in again.',
@@ -50,7 +49,6 @@ export const protect = async (
   }
 };
 
-// Role-based access control (RBAC) middleware
 export const authorize = (...roles: string[]) => {
   return (req: AuthenticatedRequest, res: Response, next: NextFunction): void | Response => {
     if (!req.user) {

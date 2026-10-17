@@ -18,7 +18,6 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({ className = '' }) => {
     >
       <Sun className={`w-4 h-4 transition-colors ${!isDark ? 'text-slate-400' : 'text-[#8696A0]'}`} />
 
-      {/* Switch Track & Sliding Thumb */}
       <div className="w-9 h-5 rounded-full p-0.5 bg-[#00A884] flex items-center transition-colors">
         <div
           className={`w-4 h-4 rounded-full bg-white shadow-xs transform transition-transform duration-200 ease-out ${

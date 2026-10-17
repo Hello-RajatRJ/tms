@@ -29,7 +29,7 @@ export const Dashboard: React.FC = () => {
   const [stats, setStats] = useState<ProjectStats | null>(null);
   const [recentProjects, setRecentProjects] = useState<Project[]>([]);
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [, setLoading] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
 
@@ -56,9 +56,7 @@ export const Dashboard: React.FC = () => {
       setStats(sData || null);
       setRecentProjects(Array.isArray(pData) ? pData : []);
       setTeamMembers(Array.isArray(mData) ? mData : []);
-    } catch (err: any) {
-      console.error('Failed to load dashboard telemetry:', err);
-    } finally {
+    } catch {} finally {
       setLoading(false);
     }
   };
@@ -78,18 +76,15 @@ export const Dashboard: React.FC = () => {
     }
   };
 
-  // Safe metrics with reference defaults
-  const totalProjectsCount = stats?.totalProjects || recentProjects.length || 12;
+  const totalProjectsCount = stats?.totalProjects ?? 12;
   const completedCount = stats?.statusCounts?.completed ?? 4;
   const inProgressCount = stats?.statusCounts?.inProgress ?? 6;
-  const pendingCount = stats?.statusCounts?.planning ?? 2;
+  const pendingCount = (stats?.statusCounts?.planning ?? 0) + (stats?.statusCounts?.onHold ?? 0) || 2;
   const avgProgressPct = stats?.avgProgress ?? 68;
   const teamMembersCount = teamMembers.length || 8;
 
-  // First name for welcome banner
   const firstName = user?.name ? user.name.split(' ')[0] : 'Alex';
 
-  // Sample workload members from reference image (or dynamic from team)
   const workloadMembers = [
     {
       name: 'Maya Chen',
@@ -114,7 +109,6 @@ export const Dashboard: React.FC = () => {
     },
   ];
 
-  // Map icon for project row
   const getProjectIcon = (title: string, category?: string) => {
     const t = (title + ' ' + (category || '')).toLowerCase();
     if (t.includes('crm') || t.includes('integration') || t.includes('backend') || t.includes('code')) {
@@ -129,7 +123,6 @@ export const Dashboard: React.FC = () => {
     return { icon: Code, bg: 'bg-emerald-50 text-[#00A884] dark:bg-emerald-950/40 dark:text-[#25D366]' };
   };
 
-  // Fallback showcase items matching reference image if empty
   const defaultShowcaseProjects = [
     {
       id: 'p1',
@@ -139,10 +132,8 @@ export const Dashboard: React.FC = () => {
       ownerRole: 'Frontend Developer',
       ownerAvatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100',
       status: 'In Progress',
-      statusClass: 'bg-blue-50 text-blue-600 dark:bg-blue-950/40 dark:text-blue-400',
       dueDate: 'Apr 25, 2025',
       progress: 70,
-      iconType: 'web',
     },
     {
       id: 'p2',
@@ -152,10 +143,8 @@ export const Dashboard: React.FC = () => {
       ownerRole: 'Backend Developer',
       ownerAvatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100',
       status: 'Completed',
-      statusClass: 'bg-emerald-50 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400',
       dueDate: 'Apr 18, 2025',
       progress: 100,
-      iconType: 'code',
     },
     {
       id: 'p3',
@@ -165,16 +154,13 @@ export const Dashboard: React.FC = () => {
       ownerRole: 'UI/UX Designer',
       ownerAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100',
       status: 'Pending',
-      statusClass: 'bg-amber-50 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400',
       dueDate: 'May 10, 2025',
       progress: 30,
-      iconType: 'mobile',
     },
   ];
 
   return (
     <div className="space-y-5 animate-fade-in">
-      {/* Toast Notification */}
       {toast && (
         <div className="fixed bottom-6 right-6 z-50 animate-fade-in flex items-center gap-2 px-4 py-3 bg-slate-900 text-white text-xs font-semibold rounded-2xl shadow-xl border border-slate-700">
           {toast.type === 'success' ? (
@@ -186,7 +172,6 @@ export const Dashboard: React.FC = () => {
         </div>
       )}
 
-      {/* Top Header Row */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-1">
         <div>
           <h1 className="text-xl sm:text-2xl font-black text-[#111B21] dark:text-[#E9EDEF] tracking-tight">
@@ -203,7 +188,6 @@ export const Dashboard: React.FC = () => {
         </div>
       </div>
 
-      {/* Welcome Banner (Matches Reference Image) */}
       <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#00A884] via-[#059669] to-[#10B981] text-white p-5 sm:p-6 shadow-md shadow-[#00A884]/15">
         <div className="relative z-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div className="flex items-center gap-3.5">
@@ -232,7 +216,7 @@ export const Dashboard: React.FC = () => {
             )}
             <Link
               to="/projects"
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl border border-white/40 text-white font-bold text-xs hover:bg-white/10 transition-all"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl border border-white/60 text-white font-bold text-xs hover:bg-white/10 transition-all"
             >
               <ListFilter className="w-3.5 h-3.5" />
               All Projects
@@ -240,13 +224,10 @@ export const Dashboard: React.FC = () => {
           </div>
         </div>
 
-        {/* Decorative corner curve */}
         <div className="absolute -right-8 -bottom-12 w-64 h-64 bg-white/10 rounded-full blur-2xl pointer-events-none" />
       </div>
 
-      {/* 4 Stat Cards Row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Card 1: Total Projects */}
         <div className="wa-card rounded-2xl p-5 flex flex-col justify-between">
           <div className="flex items-center gap-3 mb-2">
             <div className="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-[#075E54]/30 text-[#00A884] dark:text-[#25D366] flex items-center justify-center shrink-0">
@@ -263,7 +244,6 @@ export const Dashboard: React.FC = () => {
           </div>
         </div>
 
-        {/* Card 2: Completed */}
         <div className="wa-card rounded-2xl p-5 flex flex-col justify-between">
           <div className="flex items-center gap-3 mb-2">
             <div className="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-[#075E54]/30 text-[#00A884] dark:text-[#25D366] flex items-center justify-center shrink-0">
@@ -280,7 +260,6 @@ export const Dashboard: React.FC = () => {
           </div>
         </div>
 
-        {/* Card 3: In Progress */}
         <div className="wa-card rounded-2xl p-5 flex flex-col justify-between">
           <div className="flex items-center gap-3 mb-2">
             <div className="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-[#075E54]/30 text-[#00A884] dark:text-[#25D366] flex items-center justify-center shrink-0">
@@ -297,7 +276,6 @@ export const Dashboard: React.FC = () => {
           </div>
         </div>
 
-        {/* Card 4: Team Members */}
         <div className="wa-card rounded-2xl p-5 flex flex-col justify-between">
           <div className="flex items-center gap-3 mb-2">
             <div className="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-[#075E54]/30 text-[#00A884] dark:text-[#25D366] flex items-center justify-center shrink-0">
@@ -315,9 +293,7 @@ export const Dashboard: React.FC = () => {
         </div>
       </div>
 
-      {/* Middle 3 Columns Section: Project Progress, Project Status, Team Workload */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        {/* Column 1: Project Progress */}
         <div className="wa-card rounded-2xl p-5 flex flex-col justify-between">
           <div>
             <h2 className="text-sm font-extrabold text-[#111B21] dark:text-[#E9EDEF] mb-4 flex items-center gap-2">
@@ -326,7 +302,6 @@ export const Dashboard: React.FC = () => {
             </h2>
 
             <div className="flex items-center justify-between gap-4 py-2">
-              {/* Circular Donut Gauge */}
               <div className="relative flex items-center justify-center shrink-0">
                 <svg className="w-28 h-28 transform -rotate-90" viewBox="0 0 100 100">
                   <circle
@@ -361,7 +336,6 @@ export const Dashboard: React.FC = () => {
                 </div>
               </div>
 
-              {/* Legend List */}
               <div className="space-y-3 flex-1 pl-2">
                 <div className="flex items-center justify-between text-xs font-semibold">
                   <div className="flex items-center gap-2">
@@ -391,7 +365,6 @@ export const Dashboard: React.FC = () => {
           </div>
         </div>
 
-        {/* Column 2: Project Status */}
         <div className="wa-card rounded-2xl p-5 flex flex-col justify-between">
           <div>
             <h2 className="text-sm font-extrabold text-[#111B21] dark:text-[#E9EDEF] mb-4 flex items-center gap-2">
@@ -400,7 +373,6 @@ export const Dashboard: React.FC = () => {
             </h2>
 
             <div className="space-y-4 pt-1">
-              {/* Completed Row */}
               <div>
                 <div className="flex items-center justify-between text-xs font-bold mb-1.5">
                   <span className="text-[#111B21] dark:text-[#E9EDEF]">Completed</span>
@@ -414,7 +386,6 @@ export const Dashboard: React.FC = () => {
                 </div>
               </div>
 
-              {/* In Progress Row */}
               <div>
                 <div className="flex items-center justify-between text-xs font-bold mb-1.5">
                   <span className="text-[#111B21] dark:text-[#E9EDEF]">In Progress</span>
@@ -428,7 +399,6 @@ export const Dashboard: React.FC = () => {
                 </div>
               </div>
 
-              {/* Pending Row */}
               <div>
                 <div className="flex items-center justify-between text-xs font-bold mb-1.5">
                   <span className="text-[#111B21] dark:text-[#E9EDEF]">Pending</span>
@@ -445,7 +415,6 @@ export const Dashboard: React.FC = () => {
           </div>
         </div>
 
-        {/* Column 3: Team Workload */}
         <div className="wa-card rounded-2xl p-5 flex flex-col justify-between">
           <div>
             <h2 className="text-sm font-extrabold text-[#111B21] dark:text-[#E9EDEF] mb-4 flex items-center gap-2">
@@ -487,7 +456,6 @@ export const Dashboard: React.FC = () => {
         </div>
       </div>
 
-      {/* Bottom Section: Recent Projects Table */}
       <div className="wa-card rounded-2xl p-5 overflow-hidden">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
@@ -505,7 +473,6 @@ export const Dashboard: React.FC = () => {
           </Link>
         </div>
 
-        {/* Projects Table */}
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
@@ -535,7 +502,6 @@ export const Dashboard: React.FC = () => {
                 const iconConfig = getProjectIcon(title, item.category);
                 const IconComponent = iconConfig.icon;
 
-                // Status pill badge color matching reference image
                 let statusBadgeClass = 'bg-blue-50 text-blue-600 dark:bg-blue-950/40 dark:text-blue-400';
                 if (displayStatus === 'Completed') {
                   statusBadgeClass = 'bg-emerald-50 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400';
@@ -548,7 +514,6 @@ export const Dashboard: React.FC = () => {
                     key={item._id || item.id || idx}
                     className="hover:bg-[#F0F2F5]/50 dark:hover:bg-[#202C33]/50 transition-colors"
                   >
-                    {/* Project Title with Icon */}
                     <td className="py-3 px-3">
                       <div className="flex items-center gap-3">
                         <div className={`w-8 h-8 rounded-xl ${iconConfig.bg} flex items-center justify-center shrink-0`}>
@@ -565,7 +530,6 @@ export const Dashboard: React.FC = () => {
                       </div>
                     </td>
 
-                    {/* Owner */}
                     <td className="py-3 px-3">
                       <div className="flex items-center gap-2">
                         <img
@@ -584,19 +548,16 @@ export const Dashboard: React.FC = () => {
                       </div>
                     </td>
 
-                    {/* Status Pill Badge */}
                     <td className="py-3 px-3">
                       <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${statusBadgeClass}`}>
                         {displayStatus}
                       </span>
                     </td>
 
-                    {/* Due Date */}
                     <td className="py-3 px-3 text-[#667781] dark:text-[#8696A0] font-medium text-xs whitespace-nowrap">
                       {dueDate}
                     </td>
 
-                    {/* Progress with Green Bar */}
                     <td className="py-3 px-3 min-w-[140px]">
                       <div className="space-y-1">
                         <span className="text-[11px] font-bold text-[#111B21] dark:text-[#E9EDEF]">
@@ -611,7 +572,6 @@ export const Dashboard: React.FC = () => {
                       </div>
                     </td>
 
-                    {/* Actions */}
                     <td className="py-3 px-3 text-right">
                       <button
                         className="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-lg hover:bg-slate-100 dark:hover:bg-[#2A3942] transition-colors"
@@ -628,7 +588,6 @@ export const Dashboard: React.FC = () => {
         </div>
       </div>
 
-      {/* Project Form Modal */}
       {showCreateModal && (
         <ProjectForm
           allMembers={teamMembers}

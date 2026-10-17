@@ -67,7 +67,6 @@ export const Login: React.FC = () => {
       </div>
 
       <div className="w-full max-w-md space-y-6">
-        {/* Brand Header */}
         <div className="text-center space-y-2">
           <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-[#075E54] via-[#128C7E] to-[#25D366] flex items-center justify-center text-white mx-auto shadow-lg shadow-[#00A884]/25">
             <CheckSquare2 className="w-8 h-8 stroke-[2.5]" />
@@ -80,9 +79,7 @@ export const Login: React.FC = () => {
           </p>
         </div>
 
-        {/* Login Card */}
         <div className="bg-white dark:bg-[#202C33] border border-[#E9EDEF] dark:border-[#2A3942] rounded-3xl p-7 modal-wa-container animate-fade-in space-y-5 overflow-hidden relative">
-          {/* Top Emerald Accent Bar */}
           <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#075E54] via-[#00A884] to-[#25D366]" />
 
           {error && (
@@ -143,7 +140,6 @@ export const Login: React.FC = () => {
             </button>
           </form>
 
-          {/* Quick Demo Login Chips */}
           <div className="pt-4 border-t border-[#E9EDEF] dark:border-[#2A3942] space-y-2">
             <p className="text-[11px] font-bold uppercase tracking-wider text-[#667781] dark:text-[#8696A0] text-center">
               ⚡ 1-Click Quick Demo Login
@@ -182,7 +178,6 @@ export const Login: React.FC = () => {
           </div>
         </div>
 
-        {/* Sign up prompt */}
         <p className="text-center text-xs text-[#667781] dark:text-[#8696A0]">
           Need a new account?{' '}
           <Link

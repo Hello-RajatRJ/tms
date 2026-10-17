@@ -11,67 +11,37 @@ const api = axios.create({
   timeout: 15000,
 });
 
-/* ==========================================================================
-   AXIOS REQUEST INTERCEPTOR
-   - Dynamically pulls JWT token from Zustand Auth Store
-   - Attaches Authorization Bearer header
-   - Adds custom request timestamp
-   ========================================================================== */
 api.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     const token = useAuthStore.getState().token;
-
     if (token && config.headers) {
       config.headers.Authorization = `Bearer ${token}`;
     }
-
     if (config.headers) {
       config.headers['X-Request-Time'] = new Date().toISOString();
     }
-
-    if (import.meta.env.DEV) {
-      console.log(`[API Request] 🚀 ${config.method?.toUpperCase()} ${config.url}`);
-    }
-
     return config;
   },
-  (error) => {
-    console.error('[API Request Error]', error);
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
-/* ==========================================================================
-   AXIOS RESPONSE INTERCEPTOR
-   - Automatically unwraps response payload
-   - Handles 401 Unauthorized by clearing Zustand Auth Store
-   - Formats user-friendly error messages from backend validation
-   ========================================================================== */
 api.interceptors.response.use(
-  (response: AxiosResponse) => {
-    return response.data;
-  },
+  (response: AxiosResponse) => response.data,
   (error: any) => {
     let errorMessage = 'An unexpected error occurred. Please try again.';
 
-    // 1. Handle 401 Unauthorized (Session Expired / Token Invalid)
     if (error.response?.status === 401) {
       const isLoginRequest = error.config?.url?.includes('/auth/login');
       if (!isLoginRequest) {
-        console.warn('[API Auth Interceptor] ⚠️ Session expired. Logging out via Zustand store...');
         useAuthStore.getState().logout();
       }
     }
 
-    // 2. Extract structured backend errors
     if (error.response?.data) {
       const data = error.response.data;
-
       if (data.message) {
         errorMessage = data.message;
       }
-
-      // Handle Zod / Mongoose structured field errors
       if (Array.isArray(data.errors) && data.errors.length > 0) {
         const fieldDetails = data.errors
           .map((e: any) => (e.field ? `${e.field}: ${e.message}` : e.message))
@@ -80,10 +50,6 @@ api.interceptors.response.use(
       }
     } else if (error.message) {
       errorMessage = error.message;
-    }
-
-    if (import.meta.env.DEV) {
-      console.error(`[API Response Error] ❌ ${error.config?.url || ''}:`, errorMessage);
     }
 
     return Promise.reject(new Error(errorMessage));

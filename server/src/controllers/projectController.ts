@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from 'express';
 import { Project } from '../models/Project';
 import { TeamMember } from '../models/TeamMember';
 
-// GET /api/projects - List projects with search, filter, and sorting
 export const getProjects = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const { status, priority, category, search, sort = 'createdAt:desc' } = req.query as {
@@ -15,22 +14,18 @@ export const getProjects = async (req: Request, res: Response, next: NextFunctio
 
     const query: any = {};
 
-    // Filter by status
     if (status && status !== 'All') {
       query.status = status;
     }
 
-    // Filter by priority
     if (priority && priority !== 'All') {
       query.priority = priority;
     }
 
-    // Filter by category
     if (category && category !== 'All') {
       query.category = category;
     }
 
-    // Keyword search
     if (search && search.trim() !== '') {
       const searchRegex = new RegExp(search.trim(), 'i');
       query.$or = [
@@ -41,7 +36,6 @@ export const getProjects = async (req: Request, res: Response, next: NextFunctio
       ];
     }
 
-    // Sorting
     const sortParts = (sort || 'createdAt:desc').split(':');
     const sortField = sortParts[0] || 'createdAt';
     const sortOrder = sortParts[1] === 'asc' ? 1 : -1;
@@ -61,7 +55,6 @@ export const getProjects = async (req: Request, res: Response, next: NextFunctio
   }
 };
 
-// GET /api/projects/stats - Dashboard analytics
 export const getProjectStats = async (_req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const totalProjects = await Project.countDocuments();
@@ -73,7 +66,6 @@ export const getProjectStats = async (_req: Request, res: Response, next: NextFu
     const totalTeamMembers = await TeamMember.countDocuments();
     const activeTeamMembers = await TeamMember.countDocuments({ status: 'Active' });
 
-    // Financial calculations
     const financialAggregate = await Project.aggregate([
       {
         $group: {
@@ -87,7 +79,6 @@ export const getProjectStats = async (_req: Request, res: Response, next: NextFu
 
     const finances = financialAggregate[0] || { totalBudget: 0, totalSpent: 0, avgProgress: 0 };
 
-    // Priority breakdown
     const priorityAggregate = await Project.aggregate([
       {
         $group: {
@@ -104,7 +95,6 @@ export const getProjectStats = async (_req: Request, res: Response, next: NextFu
       }
     });
 
-    // Upcoming deadlines (next 7-30 days, not completed)
     const upcomingDeadlines = await Project.find({
       status: { $ne: 'Completed' },
       dueDate: { $gte: new Date() },
@@ -137,7 +127,6 @@ export const getProjectStats = async (_req: Request, res: Response, next: NextFu
   }
 };
 
-// GET /api/projects/:id - Get one project by ID
 export const getProjectById = async (req: Request, res: Response, next: NextFunction): Promise<void | Response> => {
   try {
     const project = await Project.findById(req.params.id).populate(
@@ -161,10 +150,8 @@ export const getProjectById = async (req: Request, res: Response, next: NextFunc
   }
 };
 
-// POST /api/projects - Create project
 export const createProject = async (req: Request, res: Response, next: NextFunction): Promise<void | Response> => {
   try {
-    // If teamMembers IDs are provided, verify they exist
     if (req.body.teamMembers && req.body.teamMembers.length > 0) {
       const validMembers = await TeamMember.find({ _id: { $in: req.body.teamMembers } });
       if (validMembers.length !== req.body.teamMembers.length) {
@@ -191,7 +178,6 @@ export const createProject = async (req: Request, res: Response, next: NextFunct
   }
 };
 
-// PATCH /api/projects/:id - Update project
 export const updateProject = async (req: Request, res: Response, next: NextFunction): Promise<void | Response> => {
   try {
     if (req.body.teamMembers && req.body.teamMembers.length > 0) {
@@ -227,7 +213,6 @@ export const updateProject = async (req: Request, res: Response, next: NextFunct
   }
 };
 
-// DELETE /api/projects/:id - Delete project
 export const deleteProject = async (req: Request, res: Response, next: NextFunction): Promise<void | Response> => {
   try {
     const project = await Project.findById(req.params.id);

@@ -82,14 +82,11 @@ export const TeamMembers: React.FC = () => {
     try {
       await deleteTeamMember(memberToDelete._id, memberToDelete.name);
       setMemberToDelete(null);
-    } catch (err) {
-      console.error(err);
-    }
+    } catch {}
   };
 
   return (
     <div className="space-y-4 animate-fade-in">
-      {/* Toast Notification */}
       {toast && (
         <div className="fixed bottom-6 right-6 z-50 animate-fade-in flex items-center gap-2 px-4 py-3 bg-slate-900 text-white text-xs font-semibold rounded-2xl shadow-xl border border-slate-700">
           <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" />
@@ -97,7 +94,6 @@ export const TeamMembers: React.FC = () => {
         </div>
       )}
 
-      {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-1">
         <div>
           <h1 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
@@ -128,7 +124,6 @@ export const TeamMembers: React.FC = () => {
         </div>
       </div>
 
-      {/* Search and Filters */}
       <div className="wa-card rounded-2xl p-3 sm:p-3.5 flex flex-col md:flex-row md:items-center justify-between gap-2.5">
         <div className="relative flex-1">
           <Search className="w-4 h-4 text-[#667781] dark:text-[#8696A0] absolute left-3.5 top-1/2 -translate-y-1/2" />
@@ -142,7 +137,6 @@ export const TeamMembers: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-2 flex-wrap">
-          {/* Department Filter */}
           <div className="flex items-center gap-1.5 bg-[#F0F2F5]/70 dark:bg-[#182229]/60 border border-[#E9EDEF] dark:border-[#2A3942] rounded-2xl px-3 py-1.5">
             <span className="text-[11px] font-bold text-[#667781] dark:text-[#8696A0]">Department:</span>
             <select
@@ -159,7 +153,6 @@ export const TeamMembers: React.FC = () => {
             </select>
           </div>
 
-          {/* Status Filter */}
           <div className="flex items-center gap-1.5 bg-[#F0F2F5]/70 dark:bg-[#182229]/60 border border-[#E9EDEF] dark:border-[#2A3942] rounded-2xl px-3 py-1.5">
             <span className="text-[11px] font-bold text-[#667781] dark:text-[#8696A0]">Status:</span>
             <select
@@ -176,7 +169,6 @@ export const TeamMembers: React.FC = () => {
         </div>
       </div>
 
-      {/* Grid of Team Members */}
       {loading ? (
         <CardSkeletonGrid count={6} />
       ) : error ? (
@@ -196,7 +188,6 @@ export const TeamMembers: React.FC = () => {
               className="wa-card rounded-2xl p-4 flex flex-col justify-between"
             >
               <div>
-                {/* Header with Avatar and Actions */}
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center gap-3">
                     <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-[#075E54] via-[#00A884] to-[#25D366] p-0.5 shadow-xs">
@@ -247,7 +238,6 @@ export const TeamMembers: React.FC = () => {
                   )}
                 </div>
 
-                {/* Details List */}
                 <div className="space-y-1.5 text-xs text-[#667781] dark:text-[#8696A0] mb-3">
                   <div className="flex items-center gap-2">
                     <Mail className="w-3.5 h-3.5 text-[#00A884] shrink-0" />
@@ -265,7 +255,6 @@ export const TeamMembers: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Skills tags */}
                 {member.skills && member.skills.length > 0 && (
                   <div className="flex flex-wrap gap-1.5 mb-3">
                     {member.skills.map((skill, idx) => (
@@ -280,7 +269,6 @@ export const TeamMembers: React.FC = () => {
                 )}
               </div>
 
-              {/* Card Footer: Status & Project Count */}
               <div className="pt-2.5 border-t border-[#E9EDEF] dark:border-[#2A3942] flex items-center justify-between">
                 <StatusBadge value={member.status || 'Active'} type="status" size="sm" />
                 <div className="flex items-center gap-1.5 text-xs font-bold text-[#111B21] dark:text-[#E9EDEF]">
@@ -293,7 +281,6 @@ export const TeamMembers: React.FC = () => {
         </div>
       )}
 
-      {/* Add / Edit Member Modal */}
       {activeModalMember !== null && (
         <MemberFormModal
           member={activeModalMember._id ? (activeModalMember as TeamMember) : null}
@@ -303,7 +290,6 @@ export const TeamMembers: React.FC = () => {
         />
       )}
 
-      {/* Delete Member Confirmation Modal */}
       {memberToDelete && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 modal-wa-backdrop animate-fade-in">
           <div className="w-full max-w-md bg-white dark:bg-[#202C33] rounded-3xl modal-wa-container border border-[#E9EDEF] dark:border-[#2A3942] p-6 text-center space-y-4">
@@ -343,7 +329,6 @@ export const TeamMembers: React.FC = () => {
   );
 };
 
-// Sub-component: MemberFormModal
 const MemberFormModal: React.FC<{
   member?: TeamMember | null;
   departments: string[];
@@ -413,10 +398,8 @@ const MemberFormModal: React.FC<{
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 modal-wa-backdrop animate-fade-in">
       <div className="relative w-full max-w-lg bg-white dark:bg-[#202C33] rounded-3xl modal-wa-container border border-[#E9EDEF] dark:border-[#2A3942] overflow-hidden my-8">
-        {/* Top Emerald Accent Bar */}
         <div className="h-1.5 w-full bg-gradient-to-r from-[#075E54] via-[#00A884] to-[#25D366]" />
 
-        {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-[#E9EDEF] dark:border-[#2A3942] bg-[#F0F2F5]/70 dark:bg-[#182229]/80">
           <div>
             <h2 className="text-base font-extrabold text-[#111B21] dark:text-[#E9EDEF]">
@@ -434,7 +417,6 @@ const MemberFormModal: React.FC<{
           </button>
         </div>
 
-        {/* Form Body */}
         <form onSubmit={handleSubmit} className="p-6 space-y-4 max-h-[75vh] overflow-y-auto">
           {errors.form && (
             <div className="p-3 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900 rounded-2xl text-xs text-rose-700 dark:text-rose-400">
@@ -442,7 +424,6 @@ const MemberFormModal: React.FC<{
             </div>
           )}
 
-          {/* Name */}
           <div>
             <label className="block text-xs font-bold text-[#111B21] dark:text-[#E9EDEF] mb-1.5">
               Full Name <span className="text-rose-500">*</span>
@@ -460,7 +441,6 @@ const MemberFormModal: React.FC<{
             {errors.name && <p className="text-[11px] text-rose-500 mt-1">{errors.name}</p>}
           </div>
 
-          {/* Email */}
           <div>
             <label className="block text-xs font-bold text-[#111B21] dark:text-[#E9EDEF] mb-1.5">
               Work Email <span className="text-rose-500">*</span>
@@ -478,7 +458,6 @@ const MemberFormModal: React.FC<{
             {errors.email && <p className="text-[11px] text-rose-500 mt-1">{errors.email}</p>}
           </div>
 
-          {/* Role & Department */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label className="block text-xs font-bold text-[#111B21] dark:text-[#E9EDEF] mb-1.5">
@@ -513,7 +492,6 @@ const MemberFormModal: React.FC<{
             </div>
           </div>
 
-          {/* Phone & Status */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label className="block text-xs font-bold text-[#111B21] dark:text-[#E9EDEF] mb-1.5">
@@ -546,7 +524,6 @@ const MemberFormModal: React.FC<{
             </div>
           </div>
 
-          {/* Avatar URL */}
           <div>
             <label className="block text-xs font-bold text-[#111B21] dark:text-[#E9EDEF] mb-1.5">
               Avatar Image URL (optional)
@@ -561,7 +538,6 @@ const MemberFormModal: React.FC<{
             />
           </div>
 
-          {/* Skills (comma-separated) */}
           <div>
             <label className="block text-xs font-bold text-[#111B21] dark:text-[#E9EDEF] mb-1.5">
               Skills (comma-separated)
@@ -576,7 +552,6 @@ const MemberFormModal: React.FC<{
             />
           </div>
 
-          {/* Footer Buttons */}
           <div className="pt-4 border-t border-[#E9EDEF] dark:border-[#2A3942] flex justify-end gap-3">
             <button
               type="button"
